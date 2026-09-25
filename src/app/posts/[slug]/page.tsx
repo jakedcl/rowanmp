@@ -3,8 +3,9 @@ import Link from "next/link";
 import type { PortableTextBlock } from "@portabletext/react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import type { SanityImageSource } from "@sanity/image-url";
 import { Reveal } from "@/components/Reveal";
-import { SiteHeader } from "@/components/SiteHeader";
+import { SiteShell } from "@/components/SiteShell";
 import { RichText } from "@/components/RichText";
 import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
@@ -18,6 +19,7 @@ type SiteSettings = {
   tagline?: string | null;
   email?: string | null;
   cvUrl?: string | null;
+  portrait?: (SanityImageSource & { alt?: string }) | null;
 };
 
 type Post = {
@@ -95,72 +97,62 @@ export default async function PostPage({ params }: PageProps) {
     : null;
 
   return (
-    <div className="min-h-svh">
-      <div className="mx-auto w-full max-w-[42rem] px-5 py-10 sm:px-6 sm:py-14">
-        <div className="animate-enter">
-          <SiteHeader
-            name={name}
-            tagline={settings?.tagline ?? "M.S. Student, Biology · SUNY Oneonta"}
-            email={settings?.email ?? "mentrs635@oneonta.edu"}
-            cvUrl={settings?.cvUrl}
-          />
-        </div>
+    <SiteShell
+      name={name}
+      tagline={settings?.tagline ?? "M.S. Student, Biology · SUNY Oneonta"}
+      email={settings?.email ?? "mentrs635@oneonta.edu"}
+      cvUrl={settings?.cvUrl}
+      portrait={settings?.portrait}
+      active="posts"
+    >
+      <main>
+        <p className="text-[0.85rem]">
+          <Link href="/posts" className="no-underline hover:underline">
+            ← Posts
+          </Link>
+        </p>
 
-        <main className="animate-enter-late py-10">
-          <p className="text-[0.85rem]">
-            <Link href="/posts" className="no-underline hover:underline">
-              ← Posts
-            </Link>
+        <p className="mt-6 text-[0.8rem] uppercase tracking-[0.04em] text-muted">
+          {CATEGORY_LABEL[post.category] ?? post.category}
+          <span className="mx-2 text-rule" aria-hidden>
+            ·
+          </span>
+          {formatDate(post.publishedAt)}
+        </p>
+
+        <h1 className="mt-2 text-[1.75rem] font-bold leading-tight tracking-tight sm:text-[2rem]">
+          {post.title}
+        </h1>
+
+        {post.summary ? (
+          <p className="mt-4 text-[1.05rem] leading-relaxed text-muted">
+            {post.summary}
           </p>
+        ) : null}
 
-          <p className="mt-6 text-[0.8rem] uppercase tracking-[0.04em] text-muted">
-            {CATEGORY_LABEL[post.category] ?? post.category}
-            <span className="mx-2 text-rule" aria-hidden>
-              ·
-            </span>
-            {formatDate(post.publishedAt)}
+        {coverSrc ? (
+          <Reveal className="mt-8">
+            <Image
+              src={coverSrc}
+              alt={post.coverImage?.alt || post.title}
+              width={1200}
+              height={800}
+              className="rich-image h-auto w-full border border-rule"
+              priority
+            />
+          </Reveal>
+        ) : null}
+
+        {post.body?.length ? (
+          <div className="mt-8">
+            <RichText value={post.body} />
+          </div>
+        ) : (
+          <p className="mt-8 text-[0.95rem] text-muted">
+            This post has no body yet.
           </p>
-
-          <h2 className="mt-2 text-[1.75rem] font-bold leading-tight tracking-tight">
-            {post.title}
-          </h2>
-
-          {post.summary ? (
-            <p className="mt-4 text-[1rem] leading-relaxed text-muted">
-              {post.summary}
-            </p>
-          ) : null}
-
-          {coverSrc ? (
-            <Reveal className="mt-8">
-              <Image
-                src={coverSrc}
-                alt={post.coverImage?.alt || post.title}
-                width={1200}
-                height={800}
-                className="rich-image h-auto w-full border border-rule"
-                priority
-              />
-            </Reveal>
-          ) : null}
-
-          {post.body?.length ? (
-            <div className="mt-8">
-              <RichText value={post.body} />
-            </div>
-          ) : (
-            <p className="mt-8 text-[0.95rem] text-muted">
-              This post has no body yet.
-            </p>
-          )}
-        </main>
-
-        <footer className="animate-enter-later border-t border-rule pt-6 text-[0.8rem] text-muted">
-          <p>
-            © {new Date().getFullYear()} {name}
-          </p>
-        </footer>
-      </div>
-    </div>
+        )}
+      </main>
+    </SiteShell>
   );
 }

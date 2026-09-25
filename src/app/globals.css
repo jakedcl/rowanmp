@@ -1,11 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f6f2;
+  --background: #f3f1ea;
   --foreground: #1a1a1a;
   --muted: #5c5c5c;
-  --rule: #d4d2cb;
+  --rule: #d0cdc3;
   --link: #1a3a5c;
+  --panel: #ebe7dc;
 }
 
 @theme inline {
@@ -14,6 +15,7 @@
   --color-muted: var(--muted);
   --color-rule: var(--rule);
   --color-link: var(--link);
+  --color-panel: var(--panel);
   --font-sans: Helvetica, "Helvetica Neue", Arial, sans-serif;
 }
 
@@ -34,9 +36,67 @@ a:hover {
   color: var(--foreground);
 }
 
+/* Soft paper atmosphere — not flat, not glow-slop */
+.site-atmosphere {
+  background:
+    radial-gradient(ellipse 80% 50% at 10% -10%, #e8e2d4 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 100% 0%, #ddd6c8 0%, transparent 45%),
+    linear-gradient(180deg, #f5f3ec 0%, #f0ede4 100%);
+  background-attachment: fixed;
+}
+
+.site-atmosphere::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  z-index: 0;
+}
+
+.site-atmosphere > * {
+  position: relative;
+  z-index: 1;
+}
+
+.portrait-frame {
+  box-shadow: 0 1px 0 rgba(26, 26, 26, 0.04);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) {
+  .portrait-frame:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.section-label::before {
+  content: "";
+  display: block;
+  width: 1.25rem;
+  height: 1px;
+  background: var(--foreground);
+  flex-shrink: 0;
+}
+
 /* Portable Text rhythm */
 .rich-text > .reveal:first-child {
   margin-top: 0;
+}
+
+.rich-text .section-label {
+  margin: 0;
 }
 
 /* Page enter */
@@ -78,27 +138,40 @@ a:hover {
   transform: translateY(0);
 }
 
-/* Soft post row motion */
+/* Editorial post rows */
+.post-row {
+  transition: background-color 0.25s ease, padding-left 0.25s ease;
+  margin-inline: -0.75rem;
+  padding-inline: 0.75rem;
+  border-radius: 2px;
+}
+
+.post-row:hover,
+.post-row:focus-visible {
+  background-color: rgba(235, 231, 220, 0.7);
+  padding-left: 1rem;
+}
+
+.post-row .post-title {
+  transition: letter-spacing 0.25s ease;
+}
+
+.post-row:hover .post-title,
+.post-row:focus-visible .post-title {
+  letter-spacing: 0.01em;
+}
+
+/* Legacy class kept for safety */
 .post-link {
   transition:
     background-color 0.25s ease,
-    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.25s ease;
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .post-link:hover,
 .post-link:focus-visible {
   background-color: #ebe8e0;
   transform: translateX(4px);
-}
-
-.post-link .post-title {
-  transition: letter-spacing 0.25s ease;
-}
-
-.post-link:hover .post-title,
-.post-link:focus-visible .post-title {
-  letter-spacing: 0.01em;
 }
 
 /* Image settle */
@@ -118,8 +191,12 @@ a:hover {
 @media (prefers-reduced-motion: reduce) {
   .animate-enter,
   .animate-enter-late,
-  .animate-enter-later {
+  .animate-enter-later,
+  .portrait-frame,
+  .portrait-frame:hover {
     animation: none;
+    transition: none;
+    transform: none;
   }
 
   .reveal,
@@ -128,10 +205,18 @@ a:hover {
   .reveal.is-visible .rich-image,
   .post-link,
   .post-link:hover,
-  .post-link:focus-visible {
+  .post-link:focus-visible,
+  .post-row,
+  .post-row:hover,
+  .post-row:focus-visible {
     opacity: 1;
     transform: none;
     transition: none;
     animation: none;
+    padding-left: 0.75rem;
+  }
+
+  .site-atmosphere {
+    background-attachment: scroll;
   }
 }

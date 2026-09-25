@@ -5,6 +5,7 @@ export const SITE_SETTINGS_QUERY = defineQuery(`
     name,
     tagline,
     email,
+    portrait,
     page,
     "cvUrl": cv.asset->url
   }
@@ -18,6 +19,16 @@ export const POSTS_QUERY = defineQuery(`
     category,
     publishedAt,
     summary
+  }
+`);
+
+export const RECENT_POSTS_QUERY = defineQuery(`
+  *[_type == "post" && defined(slug.current)] | order(publishedAt desc)[0...3] {
+    _id,
+    title,
+    "slug": slug.current,
+    category,
+    publishedAt
   }
 `);
 
