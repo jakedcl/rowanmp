@@ -1,18 +1,27 @@
 # rowanmp
 
-Personal site for **Rowan Mentley-Peters** — freshwater mussel researcher & Rescue Diver.
+Personal site for **Rowan Mentley-Peters** — Biology, SUNY Oneonta.
 
 ## Stack
 
 - Next.js App Router + Tailwind
-- Sanity CMS (embedded Studio at `/studio`)
+- Sanity CMS (Studio at `/studio`)
 - Vercel
+
+## How Rowan edits
+
+| In Studio | On the site |
+|---|---|
+| **Home page** → big rich-text field | `/` — write anything, drop images |
+| **Posts** | `/posts` list + `/posts/[slug]` |
+
+Categories on posts: Announcement, Publication, Project, Talk, Other.
 
 ## Local
 
 ```bash
 npm install
-cp .env.example .env.local   # fill project id + read token
+cp .env.example .env.local
 npm run dev
 ```
 
@@ -23,16 +32,7 @@ npm run dev
 
 | | |
 |---|---|
-| Project | `rowanmp` |
-| Project ID | `0mbng8go` |
+| Project | `rowanmp` (`0mbng8go`) |
 | Dataset | `production` |
 | Manage | https://www.sanity.io/manage/project/0mbng8go |
-| **Invite Rowan** | https://www.sanity.io/manage/project/0mbng8go/members |
-
-Invite as **Editor** (or Admin if he should manage members). Email from CV: `mentrs635@oneonta.edu` — confirm with him on the call.
-
-## Content model
-
-- **Site Settings** (singleton) — name, tagline, email, bio, hero, CV PDF
-- **Projects** — field / research / dive work
-- **Photos** — gallery + featured flag
+| Members | https://www.sanity.io/manage/project/0mbng8go/members |

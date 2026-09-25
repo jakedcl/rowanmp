@@ -18,17 +18,16 @@ export default defineConfig({
           .title("Content")
           .items([
             S.listItem()
-              .title("Site Settings")
+              .title("Home page")
               .id("siteSettings")
               .child(
                 S.document()
                   .schemaType("siteSettings")
                   .documentId("siteSettings")
-                  .title("Site Settings"),
+                  .title("Home page & settings"),
               ),
             S.divider(),
-            S.documentTypeListItem("project").title("Projects"),
-            S.documentTypeListItem("photo").title("Photos"),
+            S.documentTypeListItem("post").title("Posts"),
           ]),
     }),
     visionTool({ defaultApiVersion: apiVersion }),

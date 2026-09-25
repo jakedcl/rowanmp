@@ -1,8 +1,8 @@
 import { defineField, defineType } from "sanity";
 
-export const project = defineType({
-  name: "project",
-  title: "Project",
+export const post = defineType({
+  name: "post",
+  title: "Post",
   type: "document",
   fields: [
     defineField({
@@ -15,7 +15,7 @@ export const project = defineType({
       name: "slug",
       title: "Slug",
       type: "slug",
-      options: { source: "title" },
+      options: { source: "title", maxLength: 96 },
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -24,33 +24,33 @@ export const project = defineType({
       type: "string",
       options: {
         list: [
-          { title: "Field", value: "field" },
-          { title: "Research", value: "research" },
-          { title: "Dive", value: "dive" },
+          { title: "Announcement", value: "announcement" },
+          { title: "Publication", value: "publication" },
+          { title: "Project", value: "project" },
+          { title: "Talk", value: "talk" },
+          { title: "Other", value: "other" },
         ],
         layout: "radio",
       },
       validation: (rule) => rule.required(),
+      initialValue: "announcement",
     }),
     defineField({
-      name: "year",
-      title: "Year",
-      type: "string",
-    }),
-    defineField({
-      name: "role",
-      title: "Role",
-      type: "string",
+      name: "publishedAt",
+      title: "Date",
+      type: "date",
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: "summary",
       title: "Summary",
       type: "text",
       rows: 3,
+      description: "Short blurb for the posts list",
     }),
     defineField({
       name: "coverImage",
-      title: "Cover Image",
+      title: "Cover image",
       type: "image",
       options: { hotspot: true },
       fields: [
@@ -64,15 +64,14 @@ export const project = defineType({
     defineField({
       name: "body",
       title: "Body",
-      type: "array",
-      of: [{ type: "block" }],
+      type: "blockContent",
     }),
   ],
   orderings: [
     {
-      title: "Year, Newest",
-      name: "yearDesc",
-      by: [{ field: "year", direction: "desc" }],
+      title: "Date, newest",
+      name: "dateDesc",
+      by: [{ field: "publishedAt", direction: "desc" }],
     },
   ],
   preview: {
