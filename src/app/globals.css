@@ -27,8 +27,106 @@ a {
   color: var(--link);
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
+  transition: color 0.2s ease;
 }
 
 a:hover {
   color: var(--foreground);
+}
+
+/* Page enter */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-enter {
+  animation: fade-up 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-enter-late {
+  animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.14s both;
+}
+
+.animate-enter-later {
+  animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both;
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Soft post row motion */
+.post-link {
+  transition:
+    background-color 0.25s ease,
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease;
+}
+
+.post-link:hover,
+.post-link:focus-visible {
+  background-color: #ebe8e0;
+  transform: translateX(4px);
+}
+
+.post-link .post-title {
+  transition: letter-spacing 0.25s ease;
+}
+
+.post-link:hover .post-title,
+.post-link:focus-visible .post-title {
+  letter-spacing: 0.01em;
+}
+
+/* Image settle */
+.rich-image {
+  opacity: 0;
+  transform: translateY(10px) scale(0.995);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.is-visible .rich-image {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-enter,
+  .animate-enter-late,
+  .animate-enter-later {
+    animation: none;
+  }
+
+  .reveal,
+  .reveal.is-visible,
+  .rich-image,
+  .reveal.is-visible .rich-image,
+  .post-link,
+  .post-link:hover,
+  .post-link:focus-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+  }
 }

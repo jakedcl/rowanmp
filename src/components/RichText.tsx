@@ -4,6 +4,7 @@ import {
   type PortableTextComponents,
   type PortableTextBlock,
 } from "@portabletext/react";
+import { Reveal } from "@/components/Reveal";
 import { urlFor } from "@/sanity/lib/image";
 
 type Props = {
@@ -14,9 +15,11 @@ type Props = {
 const components: PortableTextComponents = {
   block: {
     h2: ({ children }) => (
-      <h2 className="mt-10 text-sm font-bold uppercase tracking-[0.06em] first:mt-0">
-        {children}
-      </h2>
+      <Reveal>
+        <h2 className="mt-10 text-sm font-bold uppercase tracking-[0.06em] first:mt-0">
+          {children}
+        </h2>
+      </Reveal>
     ),
     h3: ({ children }) => (
       <h3 className="mt-8 text-base font-bold first:mt-0">{children}</h3>
@@ -64,20 +67,22 @@ const components: PortableTextComponents = {
       const alt = value.alt || "";
       const src = urlFor(value).width(1200).height(800).fit("max").url();
       return (
-        <figure className="mt-8">
-          <Image
-            src={src}
-            alt={alt}
-            width={1200}
-            height={800}
-            className="h-auto w-full border border-rule"
-          />
-          {value.caption ? (
-            <figcaption className="mt-2 text-[0.85rem] text-muted">
-              {value.caption}
-            </figcaption>
-          ) : null}
-        </figure>
+        <Reveal>
+          <figure className="mt-8">
+            <Image
+              src={src}
+              alt={alt}
+              width={1200}
+              height={800}
+              className="rich-image h-auto w-full border border-rule"
+            />
+            {value.caption ? (
+              <figcaption className="mt-2 text-[0.85rem] text-muted">
+                {value.caption}
+              </figcaption>
+            ) : null}
+          </figure>
+        </Reveal>
       );
     },
   },

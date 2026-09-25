@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { PortableTextBlock } from "@portabletext/react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { Reveal } from "@/components/Reveal";
 import { SiteHeader } from "@/components/SiteHeader";
 import { RichText } from "@/components/RichText";
 import { urlFor } from "@/sanity/lib/image";
@@ -96,14 +97,16 @@ export default async function PostPage({ params }: PageProps) {
   return (
     <div className="min-h-svh">
       <div className="mx-auto w-full max-w-[42rem] px-5 py-10 sm:px-6 sm:py-14">
-        <SiteHeader
-          name={name}
-          tagline={settings?.tagline ?? "M.S. Student, Biology · SUNY Oneonta"}
-          email={settings?.email ?? "mentrs635@oneonta.edu"}
-          cvUrl={settings?.cvUrl}
-        />
+        <div className="animate-enter">
+          <SiteHeader
+            name={name}
+            tagline={settings?.tagline ?? "M.S. Student, Biology · SUNY Oneonta"}
+            email={settings?.email ?? "mentrs635@oneonta.edu"}
+            cvUrl={settings?.cvUrl}
+          />
+        </div>
 
-        <main className="py-10">
+        <main className="animate-enter-late py-10">
           <p className="text-[0.85rem]">
             <Link href="/posts" className="no-underline hover:underline">
               ← Posts
@@ -129,16 +132,16 @@ export default async function PostPage({ params }: PageProps) {
           ) : null}
 
           {coverSrc ? (
-            <div className="mt-8">
+            <Reveal className="mt-8">
               <Image
                 src={coverSrc}
                 alt={post.coverImage?.alt || post.title}
                 width={1200}
                 height={800}
-                className="h-auto w-full border border-rule"
+                className="rich-image h-auto w-full border border-rule"
                 priority
               />
-            </div>
+            </Reveal>
           ) : null}
 
           {post.body?.length ? (
@@ -152,7 +155,7 @@ export default async function PostPage({ params }: PageProps) {
           )}
         </main>
 
-        <footer className="border-t border-rule pt-6 text-[0.8rem] text-muted">
+        <footer className="animate-enter-later border-t border-rule pt-6 text-[0.8rem] text-muted">
           <p>
             © {new Date().getFullYear()} {name}
           </p>

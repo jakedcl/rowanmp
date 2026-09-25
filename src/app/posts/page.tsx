@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Reveal } from "@/components/Reveal";
 import { SiteHeader } from "@/components/SiteHeader";
 import { sanityFetch } from "@/sanity/lib/live";
 import { POSTS_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
@@ -51,14 +52,16 @@ export default async function PostsPage() {
   return (
     <div className="min-h-svh">
       <div className="mx-auto w-full max-w-[42rem] px-5 py-10 sm:px-6 sm:py-14">
-        <SiteHeader
-          name={name}
-          tagline={settings?.tagline ?? "M.S. Student, Biology · SUNY Oneonta"}
-          email={settings?.email ?? "mentrs635@oneonta.edu"}
-          cvUrl={settings?.cvUrl}
-        />
+        <div className="animate-enter">
+          <SiteHeader
+            name={name}
+            tagline={settings?.tagline ?? "M.S. Student, Biology · SUNY Oneonta"}
+            email={settings?.email ?? "mentrs635@oneonta.edu"}
+            cvUrl={settings?.cvUrl}
+          />
+        </div>
 
-        <main className="py-10">
+        <main className="animate-enter-late py-10">
           <h2 className="text-sm font-bold uppercase tracking-[0.06em]">
             Posts
           </h2>
@@ -75,11 +78,11 @@ export default async function PostsPage() {
             </div>
           ) : (
             <ul className="mt-8 divide-y divide-rule border-y border-rule">
-              {posts.map((post) => (
-                <li key={post._id}>
+              {posts.map((post, index) => (
+                <Reveal key={post._id} as="li" delayMs={index * 60}>
                   <Link
                     href={`/posts/${post.slug}`}
-                    className="block py-5 text-foreground no-underline transition hover:bg-[#ebe8e0]/mx-[-0.75rem] px-3"
+                    className="post-link mx-[-0.75rem] block px-3 py-5 text-foreground no-underline"
                   >
                     <p className="text-[0.8rem] uppercase tracking-[0.04em] text-muted">
                       {CATEGORY_LABEL[post.category] ?? post.category}
@@ -88,7 +91,7 @@ export default async function PostsPage() {
                       </span>
                       {formatDate(post.publishedAt)}
                     </p>
-                    <p className="mt-1 text-[1.05rem] font-bold leading-snug">
+                    <p className="post-title mt-1 text-[1.05rem] font-bold leading-snug">
                       {post.title}
                     </p>
                     {post.summary ? (
@@ -97,13 +100,13 @@ export default async function PostsPage() {
                       </p>
                     ) : null}
                   </Link>
-                </li>
+                </Reveal>
               ))}
             </ul>
           )}
         </main>
 
-        <footer className="border-t border-rule pt-6 text-[0.8rem] text-muted">
+        <footer className="animate-enter-later border-t border-rule pt-6 text-[0.8rem] text-muted">
           <p>
             © {new Date().getFullYear()} {name}
           </p>
