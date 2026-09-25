@@ -16,6 +16,7 @@ export const siteSettings = defineType({
       title: "Tagline",
       type: "text",
       rows: 2,
+      description: "Shown under the name in the site header",
     }),
     defineField({
       name: "email",
@@ -23,29 +24,17 @@ export const siteSettings = defineType({
       type: "string",
     }),
     defineField({
-      name: "bio",
-      title: "Bio",
-      type: "array",
-      of: [{ type: "block" }],
-    }),
-    defineField({
-      name: "heroImage",
-      title: "Hero Image",
-      type: "image",
-      options: { hotspot: true },
-      fields: [
-        defineField({
-          name: "alt",
-          type: "string",
-          title: "Alt text",
-        }),
-      ],
-    }),
-    defineField({
       name: "cv",
       title: "CV (PDF)",
       type: "file",
       options: { accept: "application/pdf" },
+    }),
+    defineField({
+      name: "page",
+      title: "Home page",
+      type: "blockContent",
+      description:
+        "The whole homepage. Write text, drop in images, make headings — this is what visitors see.",
     }),
   ],
   preview: {

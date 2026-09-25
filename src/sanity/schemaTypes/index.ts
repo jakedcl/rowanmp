@@ -1,5 +1,5 @@
-import { photo } from "./photo";
-import { project } from "./project";
+import { blockContent } from "./blockContent";
+import { post } from "./post";
 import { siteSettings } from "./siteSettings";
 
-export const schemaTypes = [siteSettings, project, photo];
+export const schemaTypes = [blockContent, siteSettings, post];

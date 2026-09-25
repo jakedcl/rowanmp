@@ -5,31 +5,35 @@ export const SITE_SETTINGS_QUERY = defineQuery(`
     name,
     tagline,
     email,
-    bio,
-    heroImage,
+    page,
     "cvUrl": cv.asset->url
   }
 `);
 
-export const PROJECTS_QUERY = defineQuery(`
-  *[_type == "project"] | order(year desc) {
+export const POSTS_QUERY = defineQuery(`
+  *[_type == "post" && defined(slug.current)] | order(publishedAt desc) {
     _id,
     title,
     "slug": slug.current,
     category,
-    year,
-    role,
-    summary,
-    coverImage
+    publishedAt,
+    summary
   }
 `);
 
-export const FEATURED_PHOTOS_QUERY = defineQuery(`
-  *[_type == "photo" && featured == true] | order(_createdAt desc) {
+export const POST_BY_SLUG_QUERY = defineQuery(`
+  *[_type == "post" && slug.current == $slug][0]{
     _id,
     title,
-    image,
-    caption,
-    location
+    "slug": slug.current,
+    category,
+    publishedAt,
+    summary,
+    coverImage,
+    body
   }
+`);
+
+export const POST_SLUGS_QUERY = defineQuery(`
+  *[_type == "post" && defined(slug.current)]{ "slug": slug.current }
 `);
