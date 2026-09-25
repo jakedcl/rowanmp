@@ -27,18 +27,20 @@ export default async function HomePage() {
   return (
     <div className="min-h-svh">
       <div className="mx-auto w-full max-w-[42rem] px-5 py-10 sm:px-6 sm:py-14">
-        <SiteHeader
-          name={name}
-          tagline={tagline}
-          email={email}
-          cvUrl={settings?.cvUrl}
-        />
+        <div className="animate-enter">
+          <SiteHeader
+            name={name}
+            tagline={tagline}
+            email={email}
+            cvUrl={settings?.cvUrl}
+          />
+        </div>
 
-        <main className="py-10">
+        <main className="animate-enter-late py-10">
           {page?.length ? (
             <RichText value={page} />
           ) : (
-            <div className="border border-rule bg-[#ebe8e0]/px-5 py-8 text-[0.95rem] leading-relaxed text-muted">
+            <div className="border border-rule bg-[#ebe8e0] px-5 py-8 text-[0.95rem] leading-relaxed text-muted">
               <p className="font-bold text-foreground">Home page is empty</p>
               <p className="mt-2">
                 Open{" "}
@@ -49,7 +51,7 @@ export default async function HomePage() {
           )}
         </main>
 
-        <footer className="border-t border-rule pt-6 text-[0.8rem] text-muted">
+        <footer className="animate-enter-later border-t border-rule pt-6 text-[0.8rem] text-muted">
           <p>
             © {new Date().getFullYear()} {name}
           </p>
