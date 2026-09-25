@@ -3,9 +3,9 @@ import "./globals.css";
 import { SanityLive } from "@/sanity/lib/live";
 
 export const metadata: Metadata = {
-  title: "Rowan Mentley-Peters",
+  title: "Rowan Mentley-Peters — Biology, SUNY Oneonta",
   description:
-    "Freshwater mussel researcher and Rescue Diver. Genetics below the surface of New York's rivers.",
+    "M.S. student in Biology at SUNY Oneonta. Freshwater mussel genetics, field surveys, and SCUBA research.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
