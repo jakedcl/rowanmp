@@ -16,12 +16,26 @@ export const siteSettings = defineType({
       title: "Tagline",
       type: "text",
       rows: 2,
-      description: "Shown under the name in the site header",
+      description: "Shown under the name",
     }),
     defineField({
       name: "email",
       title: "Email",
       type: "string",
+    }),
+    defineField({
+      name: "portrait",
+      title: "Portrait",
+      type: "image",
+      options: { hotspot: true },
+      description: "Shown in the sidebar. Square-ish works best.",
+      fields: [
+        defineField({
+          name: "alt",
+          type: "string",
+          title: "Alt text",
+        }),
+      ],
     }),
     defineField({
       name: "cv",
@@ -34,10 +48,10 @@ export const siteSettings = defineType({
       title: "Home page",
       type: "blockContent",
       description:
-        "The whole homepage. Write text, drop in images, make headings — this is what visitors see.",
+        "The main column. Write text, drop in images, make headings — this is what visitors read.",
     }),
   ],
   preview: {
-    select: { title: "name", subtitle: "tagline" },
+    select: { title: "name", subtitle: "tagline", media: "portrait" },
   },
 });

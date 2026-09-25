@@ -1,6 +1,7 @@
 import Link from "next/link";
+import type { SanityImageSource } from "@sanity/image-url";
 import { Reveal } from "@/components/Reveal";
-import { SiteHeader } from "@/components/SiteHeader";
+import { SiteShell } from "@/components/SiteShell";
 import { sanityFetch } from "@/sanity/lib/live";
 import { POSTS_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
 
@@ -9,6 +10,7 @@ type SiteSettings = {
   tagline?: string | null;
   email?: string | null;
   cvUrl?: string | null;
+  portrait?: (SanityImageSource & { alt?: string }) | null;
 };
 
 type PostListItem = {
@@ -34,7 +36,6 @@ function formatDate(value: string) {
   return date.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
-    day: "numeric",
   });
 }
 
@@ -46,72 +47,60 @@ export default async function PostsPage() {
 
   const settings = settingsData as SiteSettings | null;
   const posts = (postsData as PostListItem[] | null) ?? [];
-
   const name = settings?.name ?? "Rowan Mentley-Peters";
 
   return (
-    <div className="min-h-svh">
-      <div className="mx-auto w-full max-w-[42rem] px-5 py-10 sm:px-6 sm:py-14">
-        <div className="animate-enter">
-          <SiteHeader
-            name={name}
-            tagline={settings?.tagline ?? "M.S. Student, Biology · SUNY Oneonta"}
-            email={settings?.email ?? "mentrs635@oneonta.edu"}
-            cvUrl={settings?.cvUrl}
-          />
-        </div>
+    <SiteShell
+      name={name}
+      tagline={settings?.tagline ?? "M.S. Student, Biology · SUNY Oneonta"}
+      email={settings?.email ?? "mentrs635@oneonta.edu"}
+      cvUrl={settings?.cvUrl}
+      portrait={settings?.portrait}
+      active="posts"
+    >
+      <main>
+        <h1 className="section-label">Posts</h1>
+        <p className="mt-3 max-w-xl text-[0.95rem] leading-relaxed text-muted">
+          Publications, projects, talks, and announcements.
+        </p>
 
-        <main className="animate-enter-late py-10">
-          <h2 className="text-sm font-bold uppercase tracking-[0.06em]">
-            Posts
-          </h2>
-          <p className="mt-2 text-[0.9rem] text-muted">
-            Publications, projects, talks, and announcements.
-          </p>
-
-          {posts.length === 0 ? (
-            <div className="mt-8 border border-rule bg-[#ebe8e0] px-5 py-8 text-[0.95rem] leading-relaxed text-muted">
-              <p className="font-bold text-foreground">No posts yet</p>
-              <p className="mt-2">
-                Add one in <a href="/studio">Studio</a> → Posts.
-              </p>
-            </div>
-          ) : (
-            <ul className="mt-8 divide-y divide-rule border-y border-rule">
-              {posts.map((post, index) => (
-                <Reveal key={post._id} as="li" delayMs={index * 60}>
-                  <Link
-                    href={`/posts/${post.slug}`}
-                    className="post-link mx-[-0.75rem] block px-3 py-5 text-foreground no-underline"
-                  >
-                    <p className="text-[0.8rem] uppercase tracking-[0.04em] text-muted">
+        {posts.length === 0 ? (
+          <div className="mt-8 border border-rule bg-[#ebe8e0] px-5 py-8 text-[0.95rem] leading-relaxed text-muted">
+            <p className="font-bold text-foreground">No posts yet</p>
+            <p className="mt-2">
+              Add one in <a href="/studio">Studio</a> → Posts.
+            </p>
+          </div>
+        ) : (
+          <ul className="mt-8 divide-y divide-rule border-y border-rule">
+            {posts.map((post, index) => (
+              <Reveal key={post._id} as="li" delayMs={index * 50}>
+                <Link
+                  href={`/posts/${post.slug}`}
+                  className="post-row group grid grid-cols-[4.5rem_1fr] gap-4 py-5 text-foreground no-underline sm:grid-cols-[5.5rem_1fr] sm:gap-6"
+                >
+                  <span className="pt-0.5 text-[0.8rem] leading-snug tabular-nums text-muted">
+                    {formatDate(post.publishedAt)}
+                  </span>
+                  <span>
+                    <span className="block text-[0.75rem] uppercase tracking-[0.05em] text-muted">
                       {CATEGORY_LABEL[post.category] ?? post.category}
-                      <span className="mx-2 text-rule" aria-hidden>
-                        ·
-                      </span>
-                      {formatDate(post.publishedAt)}
-                    </p>
-                    <p className="post-title mt-1 text-[1.05rem] font-bold leading-snug">
+                    </span>
+                    <span className="post-title mt-1 block text-[1.1rem] font-bold leading-snug">
                       {post.title}
-                    </p>
+                    </span>
                     {post.summary ? (
-                      <p className="mt-2 text-[0.95rem] leading-relaxed text-muted">
+                      <span className="mt-2 block text-[0.95rem] leading-relaxed text-muted">
                         {post.summary}
-                      </p>
+                      </span>
                     ) : null}
-                  </Link>
-                </Reveal>
-              ))}
-            </ul>
-          )}
-        </main>
-
-        <footer className="animate-enter-later border-t border-rule pt-6 text-[0.8rem] text-muted">
-          <p>
-            © {new Date().getFullYear()} {name}
-          </p>
-        </footer>
-      </div>
-    </div>
+                  </span>
+                </Link>
+              </Reveal>
+            ))}
+          </ul>
+        )}
+      </main>
+    </SiteShell>
   );
 }

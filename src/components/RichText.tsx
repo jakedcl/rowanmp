@@ -16,9 +16,7 @@ const components: PortableTextComponents = {
   block: {
     h2: ({ children }) => (
       <Reveal className="mt-12">
-        <h2 className="text-sm font-bold uppercase tracking-[0.06em]">
-          {children}
-        </h2>
+        <h2 className="section-label">{children}</h2>
       </Reveal>
     ),
     h3: ({ children }) => (
