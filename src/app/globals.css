@@ -34,6 +34,11 @@ a:hover {
   color: var(--foreground);
 }
 
+/* Portable Text rhythm */
+.rich-text > .reveal:first-child {
+  margin-top: 0;
+}
+
 /* Page enter */
 @keyframes fade-up {
   from {
