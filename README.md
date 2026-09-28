@@ -2,6 +2,8 @@
 
 Personal site for **Rowan Mentley-Peters** — Biology, SUNY Oneonta.
 
+Homepage is a **record wall** (CSS shelves + sleeve photos), with About underneath. Posts stay separate.
+
 ## Stack
 
 - Next.js App Router + Tailwind
@@ -12,10 +14,10 @@ Personal site for **Rowan Mentley-Peters** — Biology, SUNY Oneonta.
 
 | In Studio | On the site |
 |---|---|
-| **Home page** → big rich-text field | `/` — write anything, drop images |
-| **Posts** | `/posts` list + `/posts/[slug]` |
-
-Categories on posts: Announcement, Publication, Project, Talk, Other.
+| **Shelves** | Rows on the home wall |
+| **Records** | Sleeves on a shelf → `/records/[slug]` (needs a square sleeve photo) |
+| **Home page** | About copy under the wall |
+| **Posts** | `/posts` list + detail |
 
 ## Local
 
@@ -27,6 +29,7 @@ npm run dev
 
 - Site: http://localhost:3000
 - Studio: http://localhost:3000/studio
+- Contact: http://localhost:3000/contact
 
 ## Sanity
 
