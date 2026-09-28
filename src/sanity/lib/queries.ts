@@ -48,3 +48,41 @@ export const POST_BY_SLUG_QUERY = defineQuery(`
 export const POST_SLUGS_QUERY = defineQuery(`
   *[_type == "post" && defined(slug.current)]{ "slug": slug.current }
 `);
+
+export const SHELVES_WITH_RECORDS_QUERY = defineQuery(`
+  *[_type == "shelf"] | order(order asc, title asc) {
+    _id,
+    title,
+    description,
+    order,
+    "records": *[_type == "record" && references(^._id) && defined(slug.current) && defined(sleeve.asset)]
+      | order(order asc, title asc) {
+        _id,
+        title,
+        "slug": slug.current,
+        summary,
+        sleeve,
+        order
+      }
+  }
+`);
+
+export const RECORD_BY_SLUG_QUERY = defineQuery(`
+  *[_type == "record" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    summary,
+    sleeve,
+    body,
+    "shelf": shelf->{ _id, title },
+    "relatedPost": relatedPost->{
+      title,
+      "slug": slug.current
+    }
+  }
+`);
+
+export const RECORD_SLUGS_QUERY = defineQuery(`
+  *[_type == "record" && defined(slug.current)]{ "slug": slug.current }
+`);

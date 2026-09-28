@@ -3,7 +3,6 @@ import Link from "next/link";
 import type { PortableTextBlock } from "@portabletext/react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import type { SanityImageSource } from "@sanity/image-url";
 import { Reveal } from "@/components/Reveal";
 import { SiteShell } from "@/components/SiteShell";
 import { RichText } from "@/components/RichText";
@@ -19,7 +18,6 @@ type SiteSettings = {
   tagline?: string | null;
   email?: string | null;
   cvUrl?: string | null;
-  portrait?: (SanityImageSource & { alt?: string }) | null;
 };
 
 type Post = {
@@ -102,7 +100,6 @@ export default async function PostPage({ params }: PageProps) {
       tagline={settings?.tagline ?? "M.S. Student, Biology · SUNY Oneonta"}
       email={settings?.email ?? "mentrs635@oneonta.edu"}
       cvUrl={settings?.cvUrl}
-      portrait={settings?.portrait}
       active="posts"
     >
       <main>
