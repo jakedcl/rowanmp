@@ -1,11 +1,16 @@
 import type { PortableTextBlock } from "@portabletext/react";
 import type { SanityImageSource } from "@sanity/image-url";
 import Link from "next/link";
+import { RecordWall, type WallShelf } from "@/components/RecordWall";
 import { Reveal } from "@/components/Reveal";
 import { RichText } from "@/components/RichText";
 import { SiteShell } from "@/components/SiteShell";
 import { sanityFetch } from "@/sanity/lib/live";
-import { RECENT_POSTS_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
+import {
+  RECENT_POSTS_QUERY,
+  SHELVES_WITH_RECORDS_QUERY,
+  SITE_SETTINGS_QUERY,
+} from "@/sanity/lib/queries";
 
 type SiteSettings = {
   name?: string | null;
@@ -33,12 +38,18 @@ const CATEGORY_LABEL: Record<string, string> = {
 };
 
 export default async function HomePage() {
-  const [{ data: settingsData }, { data: recentData }] = await Promise.all([
+  const [
+    { data: settingsData },
+    { data: shelvesData },
+    { data: recentData },
+  ] = await Promise.all([
     sanityFetch({ query: SITE_SETTINGS_QUERY }),
+    sanityFetch({ query: SHELVES_WITH_RECORDS_QUERY }),
     sanityFetch({ query: RECENT_POSTS_QUERY }),
   ]);
 
   const settings = settingsData as SiteSettings | null;
+  const shelves = (shelvesData as WallShelf[] | null) ?? [];
   const recent = (recentData as RecentPost[] | null) ?? [];
 
   const name = settings?.name ?? "Rowan Mentley-Peters";
@@ -53,21 +64,27 @@ export default async function HomePage() {
       tagline={tagline}
       email={email}
       cvUrl={settings?.cvUrl}
-      portrait={settings?.portrait}
       active="home"
     >
       <main>
-        {page?.length ? (
-          <RichText value={page} />
-        ) : (
-          <div className="border border-rule bg-[#ebe8e0] px-5 py-8 text-[0.95rem] leading-relaxed text-muted">
-            <p className="font-bold text-foreground">Home page is empty</p>
-            <p className="mt-2">
-              Open <a href="/studio">Studio</a> → Home page, and write in the
-              big editor. You can add text, headings, and images.
-            </p>
+        <RecordWall shelves={shelves} />
+
+        <section className="mt-14 border-t border-rule pt-10">
+          <h2 className="section-label">About</h2>
+          <div className="mt-6">
+            {page?.length ? (
+              <RichText value={page} />
+            ) : (
+              <div className="border border-rule bg-panel px-5 py-8 text-[0.95rem] leading-relaxed text-muted">
+                <p className="font-bold text-foreground">About is empty</p>
+                <p className="mt-2">
+                  Open <a href="/studio">Studio</a> → Home page to write a short
+                  bio under the wall.
+                </p>
+              </div>
+            )}
           </div>
-        )}
+        </section>
 
         {recent.length > 0 ? (
           <Reveal className="mt-14">

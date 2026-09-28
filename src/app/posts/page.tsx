@@ -1,5 +1,4 @@
 import Link from "next/link";
-import type { SanityImageSource } from "@sanity/image-url";
 import { Reveal } from "@/components/Reveal";
 import { SiteShell } from "@/components/SiteShell";
 import { sanityFetch } from "@/sanity/lib/live";
@@ -10,7 +9,6 @@ type SiteSettings = {
   tagline?: string | null;
   email?: string | null;
   cvUrl?: string | null;
-  portrait?: (SanityImageSource & { alt?: string }) | null;
 };
 
 type PostListItem = {
@@ -55,7 +53,6 @@ export default async function PostsPage() {
       tagline={settings?.tagline ?? "M.S. Student, Biology · SUNY Oneonta"}
       email={settings?.email ?? "mentrs635@oneonta.edu"}
       cvUrl={settings?.cvUrl}
-      portrait={settings?.portrait}
       active="posts"
     >
       <main>
@@ -65,7 +62,7 @@ export default async function PostsPage() {
         </p>
 
         {posts.length === 0 ? (
-          <div className="mt-8 border border-rule bg-[#ebe8e0] px-5 py-8 text-[0.95rem] leading-relaxed text-muted">
+          <div className="mt-8 border border-rule bg-panel px-5 py-8 text-[0.95rem] leading-relaxed text-muted">
             <p className="font-bold text-foreground">No posts yet</p>
             <p className="mt-2">
               Add one in <a href="/studio">Studio</a> → Posts.
