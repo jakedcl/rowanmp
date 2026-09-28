@@ -55,7 +55,7 @@ export const SHELVES_WITH_RECORDS_QUERY = defineQuery(`
     title,
     description,
     order,
-    "records": *[_type == "record" && references(^._id) && defined(slug.current) && defined(sleeve.asset)]
+    "records": *[_type == "record" && references(^._id) && defined(slug.current)]
       | order(order asc, title asc) {
         _id,
         title,

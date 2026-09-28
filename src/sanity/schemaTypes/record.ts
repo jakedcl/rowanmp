@@ -31,9 +31,8 @@ export const record = defineType({
       title: "Sleeve photo",
       type: "image",
       options: { hotspot: true },
-      validation: (rule) => rule.required(),
       description:
-        "Square cover. Upload any photo, then drag the crop hotspot — the site shows it as a square sleeve.",
+        "Optional for now — blank sleeve shows on the wall until you upload. Square crop via the hotspot.",
       fields: [
         defineField({
           name: "alt",
