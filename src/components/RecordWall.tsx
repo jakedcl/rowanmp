@@ -9,7 +9,7 @@ export type WallRecord = {
   title: string;
   slug: string;
   summary?: string | null;
-  sleeve: SanityImageSource & { alt?: string };
+  sleeve?: (SanityImageSource & { alt?: string }) | null;
 };
 
 export type WallShelf = {
@@ -23,9 +23,23 @@ type Props = {
   shelves: WallShelf[];
 };
 
+function hasSleeveAsset(
+  sleeve: WallRecord["sleeve"],
+): sleeve is SanityImageSource & { alt?: string } {
+  return Boolean(
+    sleeve &&
+      typeof sleeve === "object" &&
+      "asset" in sleeve &&
+      sleeve.asset,
+  );
+}
+
 function Sleeve({ record }: { record: WallRecord }) {
-  const src = urlFor(record.sleeve).width(600).height(600).fit("crop").url();
-  const alt = record.sleeve.alt || record.title;
+  const withPhoto = hasSleeveAsset(record.sleeve);
+  const src = withPhoto
+    ? urlFor(record.sleeve).width(600).height(600).fit("crop").url()
+    : null;
+  const alt = (withPhoto && record.sleeve.alt) || record.title;
 
   return (
     <Link
@@ -33,15 +47,21 @@ function Sleeve({ record }: { record: WallRecord }) {
       className="sleeve group"
       aria-label={record.title}
     >
-      <span className="sleeve-face">
-        <Image
-          src={src}
-          alt={alt}
-          width={600}
-          height={600}
-          className="h-full w-full object-cover"
-          sizes="(max-width: 640px) 42vw, (max-width: 1024px) 22vw, 160px"
-        />
+      <span className={`sleeve-face ${src ? "" : "sleeve-face-blank"}`.trim()}>
+        {src ? (
+          <Image
+            src={src}
+            alt={alt}
+            width={600}
+            height={600}
+            className="h-full w-full object-cover"
+            sizes="(max-width: 640px) 42vw, (max-width: 1024px) 22vw, 160px"
+          />
+        ) : (
+          <span className="sleeve-blank-label" aria-hidden>
+            No photo
+          </span>
+        )}
       </span>
       <span className="sleeve-caption">{record.title}</span>
     </Link>
@@ -77,7 +97,9 @@ export function RecordWall({ shelves }: Props) {
               <div className="shelf-bay shelf-bay-empty">
                 <div className="shelf-grid" aria-hidden />
                 <div className="shelf-ledge" />
-                <p className="shelf-empty-note">No sleeves yet — add a record in Studio</p>
+                <p className="shelf-empty-note">
+                  No records yet — add one in Studio
+                </p>
               </div>
             ) : (
               <div className="shelf-bay">
