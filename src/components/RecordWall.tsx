@@ -35,11 +35,12 @@ function hasSleeveAsset(
 }
 
 function Sleeve({ record }: { record: WallRecord }) {
-  const withPhoto = hasSleeveAsset(record.sleeve);
+  const sleeve = record.sleeve;
+  const withPhoto = hasSleeveAsset(sleeve);
   const src = withPhoto
-    ? urlFor(record.sleeve).width(600).height(600).fit("crop").url()
+    ? urlFor(sleeve).width(600).height(600).fit("crop").url()
     : null;
-  const alt = (withPhoto && record.sleeve.alt) || record.title;
+  const alt = (withPhoto ? sleeve.alt : undefined) || record.title;
 
   return (
     <Link
