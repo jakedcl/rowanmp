@@ -2,7 +2,7 @@
 
 Personal site for **Rowan Mentley-Peters** — Biology, SUNY Oneonta.
 
-Homepage is a **record wall** (CSS shelves + sleeve photos), with About underneath. Posts stay separate.
+Homepage is a **bookshelf** (wooden shelves + square album photos), with About underneath. Posts, contact, and CV are separate pages.
 
 ## Stack
 
@@ -15,9 +15,11 @@ Homepage is a **record wall** (CSS shelves + sleeve photos), with About undernea
 | In Studio | On the site |
 |---|---|
 | **Shelves** | Rows on the home wall |
-| **Records** | Sleeves on a shelf → `/records/[slug]` (needs a square sleeve photo) |
-| **Home page** | About copy under the wall |
+| **Records** | Albums on a shelf → `/records/[slug]` (square photo; blank tile until one is uploaded) |
+| **Home page** | About copy and field portrait under the shelves |
+| **Contact photo** | Tall photo on `/contact` |
 | **Posts** | `/posts` list + detail |
+| **CV** | `/cv`, with the PDF download |
 
 ## Local
 

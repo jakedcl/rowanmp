@@ -1,14 +1,16 @@
+import Image from "next/image";
 import Link from "next/link";
+import type { SanityImageSource } from "@sanity/image-url";
+import { PhotoPlaceholder } from "@/components/PhotoPlaceholder";
 import { Reveal } from "@/components/Reveal";
 import { SiteShell } from "@/components/SiteShell";
+import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
 import { POSTS_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
 
 type SiteSettings = {
   name?: string | null;
   tagline?: string | null;
-  email?: string | null;
-  cvUrl?: string | null;
 };
 
 type PostListItem = {
@@ -18,14 +20,7 @@ type PostListItem = {
   category: string;
   publishedAt: string;
   summary?: string | null;
-};
-
-const CATEGORY_LABEL: Record<string, string> = {
-  announcement: "Announcement",
-  publication: "Publication",
-  project: "Project",
-  talk: "Talk",
-  other: "Other",
+  coverImage?: (SanityImageSource & { alt?: string }) | null;
 };
 
 function formatDate(value: string) {
@@ -33,8 +28,16 @@ function formatDate(value: string) {
   if (Number.isNaN(date.getTime())) return value;
   return date.toLocaleDateString("en-US", {
     year: "numeric",
-    month: "short",
+    month: "long",
+    day: "numeric",
   });
+}
+
+function coverUrl(image: PostListItem["coverImage"]) {
+  if (!image || typeof image !== "object" || !("asset" in image) || !image.asset) {
+    return null;
+  }
+  return urlFor(image).width(1200).height(800).fit("crop").url();
 }
 
 export default async function PostsPage() {
@@ -51,13 +54,11 @@ export default async function PostsPage() {
     <SiteShell
       name={name}
       tagline={settings?.tagline ?? "M.S. Student, Biology · SUNY Oneonta"}
-      email={settings?.email ?? "mentrs635@oneonta.edu"}
-      cvUrl={settings?.cvUrl}
       active="posts"
     >
       <main>
-        <h1 className="section-label">Posts</h1>
-        <p className="mt-3 max-w-xl text-[0.95rem] leading-relaxed text-muted">
+        <h1 className="page-title">Posts</h1>
+        <p className="mt-3 max-w-xl text-[1.02rem] leading-relaxed text-muted">
           Publications, projects, talks, and announcements.
         </p>
 
@@ -65,36 +66,37 @@ export default async function PostsPage() {
           <div className="mt-8 border border-rule bg-panel px-5 py-8 text-[0.95rem] leading-relaxed text-muted">
             <p className="font-bold text-foreground">No posts yet</p>
             <p className="mt-2">
-              Add one in <a href="/studio">Studio</a> → Posts.
+              Add one in <Link href="/studio">Studio</Link> → Posts.
             </p>
           </div>
         ) : (
-          <ul className="mt-8 divide-y divide-rule border-y border-rule">
-            {posts.map((post, index) => (
-              <Reveal key={post._id} as="li" delayMs={index * 50}>
-                <Link
-                  href={`/posts/${post.slug}`}
-                  className="post-row group grid grid-cols-[4.5rem_1fr] gap-4 py-5 text-foreground no-underline sm:grid-cols-[5.5rem_1fr] sm:gap-6"
-                >
-                  <span className="pt-0.5 text-[0.8rem] leading-snug tabular-nums text-muted">
-                    {formatDate(post.publishedAt)}
-                  </span>
-                  <span>
-                    <span className="block text-[0.75rem] uppercase tracking-[0.05em] text-muted">
-                      {CATEGORY_LABEL[post.category] ?? post.category}
+          <ul className="mt-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+            {posts.map((post, index) => {
+              const src = coverUrl(post.coverImage);
+              return (
+                <Reveal key={post._id} as="li" delayMs={index * 40}>
+                  <Link href={`/posts/${post.slug}`} className="post-card">
+                    <span className="post-card-media">
+                      {src ? (
+                        <Image
+                          src={src}
+                          alt={post.coverImage?.alt || post.title}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        />
+                      ) : (
+                        <PhotoPlaceholder />
+                      )}
                     </span>
-                    <span className="post-title mt-1 block text-[1.1rem] font-bold leading-snug">
-                      {post.title}
-                    </span>
-                    {post.summary ? (
-                      <span className="mt-2 block text-[0.95rem] leading-relaxed text-muted">
-                        {post.summary}
-                      </span>
-                    ) : null}
-                  </span>
-                </Link>
-              </Reveal>
-            ))}
+                    <span className="post-card-title">{post.title}</span>
+                    <time className="post-card-date" dateTime={post.publishedAt}>
+                      {formatDate(post.publishedAt)}
+                    </time>
+                  </Link>
+                </Reveal>
+              );
+            })}
           </ul>
         )}
       </main>

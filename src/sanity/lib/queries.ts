@@ -6,6 +6,7 @@ export const SITE_SETTINGS_QUERY = defineQuery(`
     tagline,
     email,
     portrait,
+    contactImage,
     page,
     "cvUrl": cv.asset->url
   }
@@ -18,7 +19,8 @@ export const POSTS_QUERY = defineQuery(`
     "slug": slug.current,
     category,
     publishedAt,
-    summary
+    summary,
+    coverImage
   }
 `);
 
