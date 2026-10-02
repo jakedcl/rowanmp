@@ -68,6 +68,309 @@ a:hover {
   border-color: color-mix(in srgb, var(--wood-mid) 28%, var(--rule));
 }
 
+.nav-link.is-active {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1px;
+}
+
+/* ——— Study room frame ——— */
+.study-room {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--wood-dark) 20%, var(--rule));
+  background:
+    radial-gradient(ellipse 55% 70% at 8% 20%, rgba(255, 248, 230, 0.75) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 50% at 95% 30%, rgba(210, 200, 180, 0.35) 0%, transparent 50%),
+    linear-gradient(180deg, #efe8da 0%, #e7dfd0 55%, #ddd3c2 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 18px 40px rgba(60, 40, 20, 0.1);
+  padding: 1.25rem 1rem 0;
+}
+
+@media (min-width: 768px) {
+  .study-room {
+    padding: 1.75rem 1.75rem 0;
+  }
+}
+
+.study-room-glow {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    rgba(255, 250, 235, 0.35) 0%,
+    transparent 42%
+  );
+  z-index: 0;
+}
+
+.study-room-window {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .study-room-window {
+    display: block;
+    position: absolute;
+    left: 0.75rem;
+    top: 1.5rem;
+    width: 4.5rem;
+    height: 7.5rem;
+    border: 3px solid var(--wood-mid);
+    border-radius: 2px;
+    background: linear-gradient(160deg, #c5d6b8 0%, #8fad7a 45%, #6d8f5c 100%);
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.15);
+    z-index: 0;
+    opacity: 0.85;
+  }
+
+  .study-room-window-pane {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, transparent 49%, rgba(80, 50, 20, 0.35) 49%, rgba(80, 50, 20, 0.35) 51%, transparent 51%),
+      linear-gradient(0deg, transparent 49%, rgba(80, 50, 20, 0.35) 49%, rgba(80, 50, 20, 0.35) 51%, transparent 51%);
+  }
+
+  .study-room-ivy {
+    position: absolute;
+    left: -0.35rem;
+    bottom: -0.5rem;
+    width: 2.2rem;
+    height: 3rem;
+    background: radial-gradient(ellipse at 40% 20%, #5a8f4a 0%, transparent 55%),
+      radial-gradient(ellipse at 70% 60%, #3f6b35 0%, transparent 50%);
+    opacity: 0.9;
+  }
+
+  .study-room-art {
+    position: absolute;
+    right: 1rem;
+    width: 3.4rem;
+    height: 4.2rem;
+    border: 2px solid var(--wood-dark);
+    background: #f3ebe0;
+    box-shadow: 0 4px 10px rgba(40, 25, 10, 0.12);
+    z-index: 0;
+    opacity: 0.8;
+  }
+
+  .study-room-art-a {
+    top: 2rem;
+    background:
+      linear-gradient(#f3ebe0, #f3ebe0),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 8px,
+        rgba(90, 70, 40, 0.12) 8px,
+        rgba(90, 70, 40, 0.12) 9px
+      );
+  }
+
+  .study-room-art-b {
+    top: 7rem;
+    right: 1.4rem;
+    width: 3rem;
+    height: 3.6rem;
+    background:
+      radial-gradient(ellipse at 50% 60%, #6b8f5a 0%, transparent 55%),
+      #f0e8dc;
+  }
+}
+
+.study-room-stage {
+  position: relative;
+  z-index: 1;
+}
+
+.study-room .wall-frame {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0.25rem 0 0;
+}
+
+@media (min-width: 1024px) {
+  .study-room .wall-frame {
+    padding-left: 5.5rem;
+    padding-right: 5rem;
+  }
+}
+
+.study-desk {
+  position: relative;
+  z-index: 1;
+  margin-top: 1.25rem;
+  margin-inline: -1rem;
+  padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+  .study-desk {
+    margin-inline: -1.75rem;
+    padding: 0 1.75rem;
+  }
+}
+
+.study-desk-surface {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 4.5rem;
+  padding: 0.85rem 1rem 0.65rem;
+  background:
+    linear-gradient(
+      180deg,
+      var(--wood-light) 0%,
+      var(--wood-mid) 40%,
+      var(--wood-dark) 100%
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 -1px 0 rgba(40, 25, 10, 0.15);
+}
+
+.study-vinyl-stack {
+  width: 2.4rem;
+  height: 2.1rem;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #2a2a2a 0 3px,
+      #444 3px 5px,
+      #1a1a1a 5px 8px
+    );
+  border-radius: 1px;
+  opacity: 0.85;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.study-lamp {
+  width: 0.9rem;
+  height: 1.6rem;
+  border-radius: 40% 40% 10% 10%;
+  background: radial-gradient(circle at 50% 30%, #fff6d6 0%, #e8c56a 45%, #8a6a30 100%);
+  box-shadow: 0 0 18px rgba(255, 220, 120, 0.55);
+  opacity: 0.9;
+}
+
+.study-turntable {
+  position: relative;
+  width: 5.5rem;
+  height: 3.4rem;
+  background: linear-gradient(180deg, #5a4030 0%, #3d2a20 100%);
+  border-radius: 2px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.study-platter {
+  position: absolute;
+  left: 0.55rem;
+  top: 0.45rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, #222 0 12%, transparent 13%),
+    repeating-radial-gradient(circle at center, #1a1a1a 0 1px, #2e2e2e 1px 3px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.study-arm {
+  position: absolute;
+  right: 1rem;
+  top: 0.55rem;
+  width: 1.6rem;
+  height: 2px;
+  background: #c0c0c0;
+  transform: rotate(28deg);
+  transform-origin: right center;
+}
+
+.study-arm::after {
+  content: "";
+  position: absolute;
+  left: -0.25rem;
+  top: -0.2rem;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: #999;
+}
+
+.study-books {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 3.2rem;
+}
+
+.study-books span {
+  display: block;
+  height: 0.55rem;
+  border-radius: 1px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+}
+
+.study-books span:nth-child(1) {
+  background: #5c6b4a;
+}
+.study-books span:nth-child(2) {
+  background: #7a5a3a;
+  width: 92%;
+  margin-left: auto;
+}
+.study-books span:nth-child(3) {
+  background: #3f4f6b;
+  width: 96%;
+}
+
+.study-scroll-hint {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* Scroll swoop into About */
+.swoop-panel {
+  --swoop: 0;
+  opacity: calc(0.25 + 0.75 * var(--swoop));
+  transform: translate3d(
+      0,
+      calc(56px * (1 - var(--swoop))),
+      0
+    )
+    scale(calc(0.9 + 0.1 * var(--swoop)));
+  transform-origin: center top;
+  will-change: transform, opacity;
+}
+
+.about-panel {
+  border-top: 1px solid var(--rule);
+  padding-top: 2.5rem;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(235, 231, 220, 0.35) 18%,
+    transparent 100%
+  );
+}
+
+.about-photo {
+  box-shadow: 0 8px 24px rgba(40, 25, 10, 0.1);
+}
+
+.about-copy {
+  font-size: 1.02rem;
+}
+
 .portrait-frame {
   box-shadow: 0 1px 0 rgba(26, 26, 26, 0.04);
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
@@ -394,7 +697,8 @@ a:hover {
   .post-link:focus-visible,
   .post-row,
   .post-row:hover,
-  .post-row:focus-visible {
+  .post-row:focus-visible,
+  .swoop-panel {
     opacity: 1;
     transform: none;
     transition: none;

@@ -8,6 +8,8 @@ export type SiteChromeProps = {
   cvUrl?: string | null;
   children: ReactNode;
   active?: "home" | "posts" | "contact" | "record";
+  /** Wider max width for the study wall homepage */
+  wide?: boolean;
 };
 
 export function SiteShell({
@@ -17,18 +19,23 @@ export function SiteShell({
   cvUrl,
   children,
   active = "home",
+  wide = false,
 }: SiteChromeProps) {
   const navClass = (key: "home" | "posts" | "contact") =>
     [
       "nav-link no-underline transition-colors",
       active === key
-        ? "text-foreground font-bold"
+        ? "is-active text-foreground font-bold"
         : "text-link hover:text-foreground",
     ].join(" ");
 
   return (
     <div className="site-atmosphere min-h-svh">
-      <div className="mx-auto w-full max-w-5xl px-5 py-8 sm:px-8 sm:py-10">
+      <div
+        className={`mx-auto w-full px-5 py-8 sm:px-8 sm:py-10 ${
+          wide ? "max-w-6xl" : "max-w-5xl"
+        }`}
+      >
         <header className="animate-enter site-chrome border-b border-rule pb-6">
           <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
             <div className="min-w-0">
@@ -81,7 +88,7 @@ export function SiteShell({
           </div>
         </header>
 
-        <div className="animate-enter-late mt-10 min-w-0">{children}</div>
+        <div className="animate-enter-late mt-8 min-w-0 sm:mt-10">{children}</div>
 
         <footer className="animate-enter-later mt-16 border-t border-rule pt-6 text-[0.8rem] text-muted">
           <p>

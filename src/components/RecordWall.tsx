@@ -21,6 +21,8 @@ export type WallShelf = {
 
 type Props = {
   shelves: WallShelf[];
+  /** Hide titles under sleeves (cleaner study-wall look) */
+  hideCaptions?: boolean;
 };
 
 function hasSleeveAsset(
@@ -34,7 +36,13 @@ function hasSleeveAsset(
   );
 }
 
-function Sleeve({ record }: { record: WallRecord }) {
+function Sleeve({
+  record,
+  hideCaptions,
+}: {
+  record: WallRecord;
+  hideCaptions?: boolean;
+}) {
   const sleeve = record.sleeve;
   const withPhoto = hasSleeveAsset(sleeve);
   const src = withPhoto
@@ -64,12 +72,14 @@ function Sleeve({ record }: { record: WallRecord }) {
           </span>
         )}
       </span>
-      <span className="sleeve-caption">{record.title}</span>
+      {hideCaptions ? null : (
+        <span className="sleeve-caption">{record.title}</span>
+      )}
     </Link>
   );
 }
 
-export function RecordWall({ shelves }: Props) {
+export function RecordWall({ shelves, hideCaptions = false }: Props) {
   if (shelves.length === 0) {
     return (
       <div className="wall-empty border border-rule bg-panel px-5 py-10 text-[0.95rem] leading-relaxed text-muted">
@@ -83,7 +93,7 @@ export function RecordWall({ shelves }: Props) {
   }
 
   return (
-    <section className="record-wall" aria-label="Record wall">
+    <div className="record-wall">
       <div className="wall-frame">
         {shelves.map((shelf, shelfIndex) => (
           <Reveal key={shelf._id} className="shelf" delayMs={shelfIndex * 70}>
@@ -106,7 +116,11 @@ export function RecordWall({ shelves }: Props) {
               <div className="shelf-bay">
                 <div className="shelf-grid">
                   {shelf.records.map((record) => (
-                    <Sleeve key={record._id} record={record} />
+                    <Sleeve
+                      key={record._id}
+                      record={record}
+                      hideCaptions={hideCaptions}
+                    />
                   ))}
                 </div>
                 <div className="shelf-ledge" aria-hidden />
@@ -115,6 +129,6 @@ export function RecordWall({ shelves }: Props) {
           </Reveal>
         ))}
       </div>
-    </section>
+    </div>
   );
 }

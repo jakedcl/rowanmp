@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import "lenis/dist/lenis.css";
 import "./globals.css";
+import { SmoothScroll } from "@/components/SmoothScroll";
 import { SanityLive } from "@/sanity/lib/live";
 
 export const metadata: Metadata = {
@@ -12,8 +14,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col font-sans">
-        {children}
-        <SanityLive />
+        <SmoothScroll>
+          {children}
+          <SanityLive />
+        </SmoothScroll>
       </body>
     </html>
   );

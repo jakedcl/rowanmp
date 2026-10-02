@@ -28,7 +28,7 @@ export const siteSettings = defineType({
       title: "Portrait",
       type: "image",
       options: { hotspot: true },
-      description: "Shown in the sidebar. Square-ish works best.",
+      description: "Used on the About section (home) and Contact page.",
       fields: [
         defineField({
           name: "alt",
