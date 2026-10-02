@@ -3,21 +3,18 @@ import Link from "next/link";
 import type { PortableTextBlock } from "@portabletext/react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import type { SanityImageSource } from "@sanity/image-url";
+import { PhotoPlaceholder } from "@/components/PhotoPlaceholder";
 import { Reveal } from "@/components/Reveal";
 import { SiteShell } from "@/components/SiteShell";
 import { RichText } from "@/components/RichText";
 import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
-import {
-  POST_BY_SLUG_QUERY,
-  SITE_SETTINGS_QUERY,
-} from "@/sanity/lib/queries";
+import { POST_BY_SLUG_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
 
 type SiteSettings = {
   name?: string | null;
   tagline?: string | null;
-  email?: string | null;
-  cvUrl?: string | null;
 };
 
 type Post = {
@@ -27,19 +24,8 @@ type Post = {
   category: string;
   publishedAt: string;
   summary?: string | null;
-  coverImage?: {
-    alt?: string;
-    asset?: unknown;
-  } | null;
+  coverImage?: (SanityImageSource & { alt?: string }) | null;
   body?: PortableTextBlock[] | null;
-};
-
-const CATEGORY_LABEL: Record<string, string> = {
-  announcement: "Announcement",
-  publication: "Publication",
-  project: "Project",
-  talk: "Talk",
-  other: "Other",
 };
 
 function formatDate(value: string) {
@@ -50,6 +36,13 @@ function formatDate(value: string) {
     month: "long",
     day: "numeric",
   });
+}
+
+function coverUrl(image: Post["coverImage"]) {
+  if (!image || typeof image !== "object" || !("asset" in image) || !image.asset) {
+    return null;
+  }
+  return urlFor(image).width(1600).height(1000).fit("max").url();
 }
 
 type PageProps = {
@@ -90,58 +83,49 @@ export default async function PostPage({ params }: PageProps) {
   if (!post) notFound();
 
   const name = settings?.name ?? "Rowan Mentley-Peters";
-  const coverSrc = post.coverImage?.asset
-    ? urlFor(post.coverImage).width(1200).height(800).fit("max").url()
-    : null;
+  const coverSrc = coverUrl(post.coverImage);
 
   return (
     <SiteShell
       name={name}
       tagline={settings?.tagline ?? "M.S. Student, Biology · SUNY Oneonta"}
-      email={settings?.email ?? "mentrs635@oneonta.edu"}
-      cvUrl={settings?.cvUrl}
       active="posts"
     >
       <main>
-        <p className="text-[0.85rem]">
-          <Link href="/posts" className="no-underline hover:underline">
-            ← Posts
-          </Link>
+        <Link href="/posts" className="back-link">
+          Back to Posts
+        </Link>
+
+        <h1 className="page-title mt-8 max-w-3xl">{post.title}</h1>
+        <p className="mt-3 text-[0.95rem] text-muted">
+          <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
         </p>
 
-        <p className="mt-6 text-[0.8rem] uppercase tracking-[0.04em] text-muted">
-          {CATEGORY_LABEL[post.category] ?? post.category}
-          <span className="mx-2 text-rule" aria-hidden>
-            ·
-          </span>
-          {formatDate(post.publishedAt)}
-        </p>
-
-        <h1 className="mt-2 text-[1.75rem] font-bold leading-tight tracking-tight sm:text-[2rem]">
-          {post.title}
-        </h1>
+        <Reveal className="mt-8">
+          <div className="relative aspect-[16/9] overflow-hidden bg-placeholder">
+            {coverSrc ? (
+              <Image
+                src={coverSrc}
+                alt={post.coverImage?.alt || post.title}
+                fill
+                className="rich-image object-cover"
+                sizes="(max-width: 1152px) 100vw, 72rem"
+                priority
+              />
+            ) : (
+              <PhotoPlaceholder note="Post cover" />
+            )}
+          </div>
+        </Reveal>
 
         {post.summary ? (
-          <p className="mt-4 text-[1.05rem] leading-relaxed text-muted">
+          <p className="mt-8 max-w-2xl text-[1.08rem] leading-relaxed text-muted">
             {post.summary}
           </p>
         ) : null}
 
-        {coverSrc ? (
-          <Reveal className="mt-8">
-            <Image
-              src={coverSrc}
-              alt={post.coverImage?.alt || post.title}
-              width={1200}
-              height={800}
-              className="rich-image h-auto w-full border border-rule"
-              priority
-            />
-          </Reveal>
-        ) : null}
-
         {post.body?.length ? (
-          <div className="mt-8">
+          <div className="mt-6 max-w-2xl">
             <RichText value={post.body} />
           </div>
         ) : (

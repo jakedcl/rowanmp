@@ -4,6 +4,7 @@ import {
   useEffect,
   useRef,
   useState,
+  useSyncExternalStore,
   type CSSProperties,
   type ElementType,
   type ReactNode,
@@ -24,22 +25,27 @@ export function Reveal({
 }: Props) {
   const Tag = as as ElementType;
   const ref = useRef<HTMLElement | null>(null);
-  const [visible, setVisible] = useState(false);
+  const [seen, setSeen] = useState(false);
+  const reduced = useSyncExternalStore(
+    (onChange) => {
+      const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+      media.addEventListener("change", onChange);
+      return () => media.removeEventListener("change", onChange);
+    },
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    () => false,
+  );
+  const visible = reduced || seen;
 
   useEffect(() => {
+    if (reduced) return;
     const node = ref.current;
     if (!node) return;
-
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) {
-      setVisible(true);
-      return;
-    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting) {
-          setVisible(true);
+          setSeen(true);
           observer.disconnect();
         }
       },
@@ -48,7 +54,7 @@ export function Reveal({
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, []);
+  }, [reduced]);
 
   const style = {
     ["--reveal-delay" as string]: `${delayMs}ms`,
