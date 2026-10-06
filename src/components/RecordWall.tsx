@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { SanityImageSource } from "@sanity/image-url";
 import { Reveal } from "@/components/Reveal";
+import { SleeveDemo } from "@/components/SleeveDemo";
 import { urlFor } from "@/sanity/lib/image";
 
 export type WallRecord = {
@@ -34,7 +35,7 @@ function hasSleeveAsset(
   );
 }
 
-function Sleeve({ record }: { record: WallRecord }) {
+function Sleeve({ record, demo = false }: { record: WallRecord; demo?: boolean }) {
   const sleeve = record.sleeve;
   const withPhoto = hasSleeveAsset(sleeve);
   const src = withPhoto
@@ -44,7 +45,11 @@ function Sleeve({ record }: { record: WallRecord }) {
     withPhoto && sleeve.alt && sleeve.alt !== record.title ? sleeve.alt : "";
 
   return (
-    <Link href={`/records/${record.slug}`} className="sleeve">
+    <Link
+      href={`/records/${record.slug}`}
+      className="sleeve"
+      {...(demo ? { "data-sleeve-demo": "" } : {})}
+    >
       <span className="sleeve-caption">{record.title}</span>
       <span className="sleeve-stand">
         <span className="sleeve-disc" aria-hidden>
@@ -98,8 +103,11 @@ export function RecordWall({ shelves }: Props) {
     );
   }
 
+  const demoId = shelves.find((shelf) => shelf.records.length > 0)?.records[0]?._id;
+
   return (
     <section className="record-wall" aria-label="Record shelves">
+      <SleeveDemo />
       {shelves.map((shelf, shelfIndex) => (
         <Reveal key={shelf._id} className="shelf" delayMs={shelfIndex * 70}>
           <div className="shelf-heading">
@@ -117,7 +125,7 @@ export function RecordWall({ shelves }: Props) {
             ) : (
               <div className="shelf-row">
                 {shelf.records.map((record) => (
-                  <Sleeve key={record._id} record={record} />
+                  <Sleeve key={record._id} record={record} demo={record._id === demoId} />
                 ))}
               </div>
             )}

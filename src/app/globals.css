@@ -554,6 +554,53 @@ a:hover {
   }
 }
 
+/* One-time hint on the first sleeve. Same peek as hover, then a small wiggle. */
+.sleeve.is-demo,
+.sleeve.is-demo-fade {
+  z-index: 3;
+}
+
+.sleeve.is-demo .sleeve-disc {
+  animation: sleeve-disc-demo 2.15s linear both;
+}
+
+@keyframes sleeve-disc-demo {
+  0% {
+    transform: translateX(0) translateY(-50%);
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  32% {
+    transform: translateX(48%) translateY(-50%);
+    animation-timing-function: ease-in-out;
+  }
+  44% {
+    transform: translateX(43%) translateY(-50%) rotate(-1.6deg);
+    animation-timing-function: ease-in-out;
+  }
+  56% {
+    transform: translateX(51%) translateY(-50%) rotate(1.6deg);
+    animation-timing-function: ease-in-out;
+  }
+  68% {
+    transform: translateX(48%) translateY(-50%);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  100% {
+    transform: translateX(0) translateY(-50%);
+  }
+}
+
+@keyframes sleeve-disc-demo-fade {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  38%,
+  62% {
+    opacity: 1;
+  }
+}
+
 .sleeve:focus-visible {
   outline: none;
 }
@@ -671,5 +718,13 @@ a:hover {
 
   .site-atmosphere {
     background-attachment: scroll;
+  }
+
+  .sleeve.is-demo .sleeve-disc {
+    animation: none;
+  }
+
+  .sleeve.is-demo-fade .sleeve-disc {
+    animation: sleeve-disc-demo-fade 1.4s ease both;
   }
 }
