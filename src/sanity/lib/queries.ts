@@ -19,8 +19,7 @@ export const POSTS_QUERY = defineQuery(`
     "slug": slug.current,
     category,
     publishedAt,
-    summary,
-    coverImage
+    summary
   }
 `);
 

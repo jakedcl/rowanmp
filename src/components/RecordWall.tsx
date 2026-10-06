@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { SanityImageSource } from "@sanity/image-url";
-import { PhotoPlaceholder } from "@/components/PhotoPlaceholder";
 import { Reveal } from "@/components/Reveal";
 import { urlFor } from "@/sanity/lib/image";
 
@@ -24,44 +23,45 @@ type Props = {
   shelves: WallShelf[];
 };
 
-function hasImageAsset(
-  image: WallRecord["sleeve"],
-): image is SanityImageSource & { alt?: string } {
+function hasSleeveAsset(
+  sleeve: WallRecord["sleeve"],
+): sleeve is SanityImageSource & { alt?: string } {
   return Boolean(
-    image && typeof image === "object" && "asset" in image && image.asset,
+    sleeve &&
+      typeof sleeve === "object" &&
+      "asset" in sleeve &&
+      sleeve.asset,
   );
 }
 
-function Album({ record }: { record: WallRecord }) {
+function Sleeve({ record }: { record: WallRecord }) {
   const sleeve = record.sleeve;
-  const withPhoto = hasImageAsset(sleeve);
+  const withPhoto = hasSleeveAsset(sleeve);
   const src = withPhoto
-    ? urlFor(sleeve).width(800).height(800).fit("crop").url()
+    ? urlFor(sleeve).width(640).height(640).fit("crop").url()
     : null;
-  const alt = (withPhoto ? sleeve.alt : undefined) || record.title;
+  const alt =
+    withPhoto && sleeve.alt && sleeve.alt !== record.title ? sleeve.alt : "";
 
   return (
-    <Link href={`/records/${record.slug}`} className="album" aria-label={record.title}>
-      <span className="album-face">
+    <Link href={`/records/${record.slug}`} className="sleeve">
+      <span className="sleeve-caption">{record.title}</span>
+      <span className={`sleeve-face ${src ? "" : "sleeve-face-blank"}`.trim()}>
         {src ? (
           <Image
             src={src}
             alt={alt}
-            fill
-            className="object-cover"
-            sizes="(max-width: 1024px) 30vw, 16vw"
+            width={640}
+            height={640}
+            className="h-full w-full object-cover"
+            sizes="164px"
           />
         ) : (
-          <PhotoPlaceholder />
+          <span className="sleeve-blank" aria-hidden />
         )}
-        <span className="album-caption">{record.title}</span>
       </span>
     </Link>
   );
-}
-
-function ShelfBar() {
-  return <div className="shelf-bar" aria-hidden />;
 }
 
 export function RecordWall({ shelves }: Props) {
@@ -70,33 +70,38 @@ export function RecordWall({ shelves }: Props) {
       <div className="border border-rule bg-panel px-5 py-10 text-[0.95rem] leading-relaxed text-muted">
         <p className="font-bold text-foreground">The shelves are empty</p>
         <p className="mt-2">
-          Open <Link href="/studio">Studio</Link> → Shelves to add a row, then
-          Records to place photos on it.
+          Open <Link href="/studio">Studio</Link> → Shelves to add a row, then Records
+          to drop in sleeve photos.
         </p>
       </div>
     );
   }
 
   return (
-    <section aria-label="Shelves">
+    <section className="record-wall" aria-label="Record shelves">
       {shelves.map((shelf, shelfIndex) => (
-        <Reveal key={shelf._id} className="shelf" delayMs={shelfIndex * 60}>
-          <h2 className="section-label shelf-label">{shelf.title}</h2>
-          {shelf.records.length === 0 ? (
-            <div className="shelf-bay">
-              <p className="shelf-empty">No albums on this shelf yet.</p>
-              <ShelfBar />
-            </div>
-          ) : (
-            <div className="shelf-bay">
-              <div className="shelf-grid">
+        <Reveal key={shelf._id} className="shelf" delayMs={shelfIndex * 70}>
+          <div className="shelf-heading">
+            <h2 className="shelf-title">{shelf.title}</h2>
+            {shelf.description ? (
+              <p className="shelf-desc">{shelf.description}</p>
+            ) : null}
+          </div>
+
+          <div
+            className={`shelf-bay ${shelf.records.length === 0 ? "shelf-bay-empty" : ""}`.trim()}
+          >
+            {shelf.records.length === 0 ? (
+              <p className="shelf-empty-note">No records on this shelf yet.</p>
+            ) : (
+              <div className="shelf-row">
                 {shelf.records.map((record) => (
-                  <Album key={record._id} record={record} />
+                  <Sleeve key={record._id} record={record} />
                 ))}
               </div>
-              <ShelfBar />
-            </div>
-          )}
+            )}
+            <div className="shelf-bar" aria-hidden />
+          </div>
         </Reveal>
       ))}
     </section>

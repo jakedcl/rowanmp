@@ -4,17 +4,21 @@ import type { PortableTextBlock } from "@portabletext/react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { SanityImageSource } from "@sanity/image-url";
-import { PhotoPlaceholder } from "@/components/PhotoPlaceholder";
 import { Reveal } from "@/components/Reveal";
 import { RichText } from "@/components/RichText";
 import { SiteShell } from "@/components/SiteShell";
 import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
-import { RECORD_BY_SLUG_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
+import {
+  RECORD_BY_SLUG_QUERY,
+  SITE_SETTINGS_QUERY,
+} from "@/sanity/lib/queries";
 
 type SiteSettings = {
   name?: string | null;
   tagline?: string | null;
+  email?: string | null;
+  cvUrl?: string | null;
 };
 
 type RecordDoc = {
@@ -32,13 +36,6 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
-function sleeveUrl(image: RecordDoc["sleeve"]) {
-  if (!image || typeof image !== "object" || !("asset" in image) || !image.asset) {
-    return null;
-  }
-  return urlFor(image).width(1200).height(1200).fit("crop").url();
-}
-
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
@@ -51,13 +48,22 @@ export async function generateMetadata({
   const record = data as RecordDoc | null;
   if (!record) return { title: "Record not found" };
 
-  const src = sleeveUrl(record.sleeve);
+  const images = record.sleeve
+    ? [
+        {
+          url: urlFor(record.sleeve).width(1200).height(1200).fit("crop").url(),
+        },
+      ]
+    : undefined;
+
   return {
     title: `${record.title} — Rowan Mentley-Peters`,
     description: record.summary ?? undefined,
-    openGraph: src
-      ? { title: record.title, description: record.summary ?? undefined, images: [{ url: src }] }
-      : undefined,
+    openGraph: {
+      title: record.title,
+      description: record.summary ?? undefined,
+      images,
+    },
   };
 }
 
@@ -77,22 +83,26 @@ export default async function RecordPage({ params }: PageProps) {
   if (!record) notFound();
 
   const name = settings?.name ?? "Rowan Mentley-Peters";
-  const src = sleeveUrl(record.sleeve);
+  const sleeveSrc = record.sleeve
+    ? urlFor(record.sleeve).width(900).height(900).fit("crop").url()
+    : null;
 
   return (
     <SiteShell
       name={name}
       tagline={settings?.tagline ?? "M.S. Student, Biology · SUNY Oneonta"}
+      email={settings?.email ?? "mentrs635@oneonta.edu"}
+      cvUrl={settings?.cvUrl}
       active="record"
     >
       <main>
-        <p className="text-[0.9rem]">
-          <Link href="/" className="back-link">
-            Back to Home
+        <p className="text-[0.85rem]">
+          <Link href="/" className="no-underline hover:underline">
+            ← Wall
           </Link>
           {record.shelf ? (
             <span className="text-muted">
-              <span className="mx-2" aria-hidden>
+              <span className="mx-2 text-rule" aria-hidden>
                 ·
               </span>
               {record.shelf.title}
@@ -100,34 +110,38 @@ export default async function RecordPage({ params }: PageProps) {
           ) : null}
         </p>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,18rem)_1fr] lg:gap-12">
-          <Reveal>
-            <div className="relative aspect-square w-full max-w-[18rem] overflow-hidden bg-placeholder">
-              {src ? (
+        <div className="mt-8 grid gap-8 sm:grid-cols-[minmax(0,14rem)_1fr] sm:gap-10 lg:grid-cols-[minmax(0,16rem)_1fr]">
+          {sleeveSrc ? (
+            <Reveal>
+              <div className="record-hero-sleeve relative aspect-square w-full max-w-[16rem] overflow-hidden bg-panel">
                 <Image
-                  src={src}
+                  src={sleeveSrc}
                   alt={record.sleeve?.alt || record.title}
                   fill
                   className="object-cover"
-                  sizes="18rem"
+                  sizes="16rem"
                   priority
                 />
-              ) : (
-                <PhotoPlaceholder />
-              )}
+              </div>
+            </Reveal>
+          ) : (
+            <div className="aspect-square w-full max-w-[16rem] border border-rule bg-panel p-4 text-[0.85rem] text-muted">
+              Sleeve forthcoming
             </div>
-          </Reveal>
+          )}
 
           <div className="min-w-0">
-            <h1 className="page-title">{record.title}</h1>
+            <h1 className="text-[1.75rem] font-bold leading-tight tracking-tight sm:text-[2rem]">
+              {record.title}
+            </h1>
             {record.summary ? (
-              <p className="mt-4 max-w-xl text-[1.05rem] leading-relaxed text-muted">
+              <p className="mt-4 text-[1.05rem] leading-relaxed text-muted">
                 {record.summary}
               </p>
             ) : null}
 
             {record.body?.length ? (
-              <div className="mt-8 max-w-2xl">
+              <div className="mt-8">
                 <RichText value={record.body} />
               </div>
             ) : (
@@ -138,8 +152,11 @@ export default async function RecordPage({ params }: PageProps) {
 
             {record.relatedPost?.slug ? (
               <p className="mt-8 text-[0.95rem]">
-                <Link href={`/posts/${record.relatedPost.slug}`}>
-                  Related post: {record.relatedPost.title}
+                <Link
+                  href={`/posts/${record.relatedPost.slug}`}
+                  className="no-underline hover:underline"
+                >
+                  Related post: {record.relatedPost.title} →
                 </Link>
               </p>
             ) : null}

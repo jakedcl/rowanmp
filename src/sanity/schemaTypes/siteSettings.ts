@@ -28,8 +28,7 @@ export const siteSettings = defineType({
       title: "Portrait",
       type: "image",
       options: { hotspot: true },
-      description:
-        "Wide photo beside the About text on the homepage. A field or river photo works best.",
+      description: "Shown on the contact page. Square-ish works best.",
       fields: [
         defineField({
           name: "alt",
@@ -44,7 +43,7 @@ export const siteSettings = defineType({
       type: "image",
       options: { hotspot: true },
       description:
-        "Tall photo on the right of the Contact page. A forested river works best.",
+        "Optional extra photo. Kept so an upload in Studio is not dropped. The contact page shows the portrait.",
       fields: [
         defineField({
           name: "alt",
