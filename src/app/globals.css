@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f3f1ea;
+  --background: #f4eee4;
   --foreground: #1a1a1a;
   --muted: #5c5c5c;
   --rule: #d0cdc3;
@@ -10,7 +10,7 @@
   --wood-light: #c4a574;
   --wood-mid: #9a7348;
   --wood-dark: #6b4a2e;
-  --wall: #e4ddd0;
+  --wall: #efe4d4;
 }
 
 @theme inline {
@@ -40,12 +40,10 @@ a:hover {
   color: var(--foreground);
 }
 
-/* Soft paper atmosphere — themed with the wall */
+/* Warm paper wall behind the oak. Flat enough to stay academic. */
 .site-atmosphere {
-  background:
-    radial-gradient(ellipse 80% 50% at 10% -10%, #e8e2d4 0%, transparent 55%),
-    radial-gradient(ellipse 60% 40% at 100% 0%, #ddd6c8 0%, transparent 45%),
-    linear-gradient(180deg, #f5f3ec 0%, #efe9df 100%);
+  background-color: #f3ebdf;
+  background-image: linear-gradient(180deg, #f8f3ea 0%, #f4eee3 46%, #f0e6d6 100%);
   background-attachment: fixed;
 }
 
@@ -54,8 +52,10 @@ a:hover {
   pointer-events: none;
   position: fixed;
   inset: 0;
-  opacity: 0.035;
+  opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 160px 160px;
   z-index: 0;
 }
 
@@ -151,27 +151,37 @@ a:hover {
    https://ambientcg.com/view?id=Wood049
    Lighting on the board is a thin overlay; the grain is the photograph. */
 .shelf + .shelf {
-  margin-top: 2.5rem;
+  margin-top: 3.25rem;
 }
 
 .shelf-heading {
-  margin-bottom: 0.7rem;
+  margin-bottom: 1.15rem;
 }
 
 .shelf-title {
-  font-size: 0.8rem;
+  font-size: 0.84rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--foreground);
 }
 
 .shelf-desc {
-  margin-top: 0.25rem;
+  margin-top: 0.4rem;
   max-width: 36rem;
   font-size: 0.85rem;
   color: var(--muted);
-  line-height: 1.4;
+  line-height: 1.45;
+}
+
+@media (min-width: 640px) {
+  .shelf + .shelf {
+    margin-top: 4.25rem;
+  }
+
+  .shelf-heading {
+    margin-bottom: 1.35rem;
+  }
 }
 
 .shelf-bay {
