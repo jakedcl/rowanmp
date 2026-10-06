@@ -48,10 +48,11 @@ function Sleeve({ record }: { record: WallRecord }) {
       <span className="sleeve-caption">{record.title}</span>
       <span className="sleeve-stand">
         <span className="sleeve-disc" aria-hidden>
-          <span
-            className="sleeve-disc-label"
-            style={src ? { backgroundImage: `url("${src}")` } : undefined}
-          />
+          <span className="sleeve-disc-label">
+            {src ? (
+              <Image src={src} alt="" fill className="object-cover" sizes="64px" />
+            ) : null}
+          </span>
         </span>
         <span className={`sleeve-face ${src ? "" : "sleeve-face-blank"}`.trim()}>
           {src ? (

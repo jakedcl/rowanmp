@@ -370,7 +370,7 @@ a:hover {
 .sleeve-disc {
   position: absolute;
   z-index: 1;
-  top: 0;
+  top: 50%;
   left: 7%;
   width: 86%;
   aspect-ratio: 1;
@@ -385,7 +385,7 @@ a:hover {
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.07),
     inset 0 0 14px rgba(0, 0, 0, 0.55);
-  transform: translateX(0);
+  transform: translateY(-50%);
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -416,14 +416,18 @@ a:hover {
   z-index: 1;
   left: 50%;
   top: 50%;
-  width: 34%;
+  width: 36%;
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
   overflow: hidden;
   border-radius: 50%;
-  background-color: #6d6254;
-  background-position: center;
-  background-size: cover;
+  clip-path: circle(50%);
+  background-color: #efe6d6;
+}
+
+.sleeve-disc-label img {
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .sleeve-disc-label::after {
@@ -541,7 +545,7 @@ a:hover {
 
   .sleeve:hover .sleeve-disc,
   .sleeve:focus-visible .sleeve-disc {
-    transform: translateX(48%);
+    transform: translateX(48%) translateY(-50%);
   }
 
   .sleeve:hover .sleeve-caption,
@@ -638,7 +642,7 @@ a:hover {
 
   .sleeve-disc {
     opacity: 0;
-    transform: translateX(48%);
+    transform: translateX(48%) translateY(-50%);
   }
 
   @media (hover: hover) {
