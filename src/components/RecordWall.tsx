@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { SanityImageSource } from "@sanity/image-url";
 import { Reveal } from "@/components/Reveal";
 import { SleeveDemo } from "@/components/SleeveDemo";
+import { SleeveLink } from "@/components/SleeveLink";
 import { urlFor } from "@/sanity/lib/image";
 
 export type WallRecord = {
@@ -45,11 +46,7 @@ function Sleeve({ record, demo = false }: { record: WallRecord; demo?: boolean }
     withPhoto && sleeve.alt && sleeve.alt !== record.title ? sleeve.alt : "";
 
   return (
-    <Link
-      href={`/records/${record.slug}`}
-      className="sleeve"
-      {...(demo ? { "data-sleeve-demo": "" } : {})}
-    >
+    <SleeveLink href={`/records/${record.slug}`} demo={demo}>
       <span className="sleeve-stand">
         <span className="sleeve-disc" aria-hidden>
           <span className="sleeve-disc-label">
@@ -76,7 +73,7 @@ function Sleeve({ record, demo = false }: { record: WallRecord; demo?: boolean }
           </span>
         </span>
       </span>
-    </Link>
+    </SleeveLink>
   );
 }
 

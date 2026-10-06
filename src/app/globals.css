@@ -693,6 +693,16 @@ a:hover {
   }
 }
 
+/* Tap peek where hover is unavailable. Same slide as :hover; JS removes it by navigating. */
+.sleeve.is-peek {
+  z-index: 3;
+}
+
+.sleeve.is-peek .sleeve-disc {
+  animation: none;
+  transform: translateX(48%) translateY(-50%);
+}
+
 .sleeve:focus-visible {
   outline: none;
 }
