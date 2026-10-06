@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { SanityImageSource } from "@sanity/image-url";
 import { Reveal } from "@/components/Reveal";
+import { SleeveDemo } from "@/components/SleeveDemo";
 import { urlFor } from "@/sanity/lib/image";
 
 export type WallRecord = {
@@ -34,7 +35,7 @@ function hasSleeveAsset(
   );
 }
 
-function Sleeve({ record }: { record: WallRecord }) {
+function Sleeve({ record, demo = false }: { record: WallRecord; demo?: boolean }) {
   const sleeve = record.sleeve;
   const withPhoto = hasSleeveAsset(sleeve);
   const src = withPhoto
@@ -44,9 +45,20 @@ function Sleeve({ record }: { record: WallRecord }) {
     withPhoto && sleeve.alt && sleeve.alt !== record.title ? sleeve.alt : "";
 
   return (
-    <Link href={`/records/${record.slug}`} className="sleeve">
+    <Link
+      href={`/records/${record.slug}`}
+      className="sleeve"
+      {...(demo ? { "data-sleeve-demo": "" } : {})}
+    >
       <span className="sleeve-caption">{record.title}</span>
       <span className="sleeve-stand">
+        <span className="sleeve-disc" aria-hidden>
+          <span className="sleeve-disc-label">
+            {src ? (
+              <Image src={src} alt="" fill className="object-cover" sizes="64px" />
+            ) : null}
+          </span>
+        </span>
         <span className={`sleeve-face ${src ? "" : "sleeve-face-blank"}`.trim()}>
           {src ? (
             <Image
@@ -66,31 +78,14 @@ function Sleeve({ record }: { record: WallRecord }) {
   );
 }
 
-function ShelfBracket({ side }: { side: "left" | "right" }) {
-  return (
-    <span className={`shelf-bracket shelf-bracket-${side}`}>
-      <svg viewBox="0 0 34 28" width="34" height="28" aria-hidden focusable="false">
-        <path
-          fill="#171615"
-          d="M1.2 1.15H22.4v1.85H3.55L7.15 26.2H4.55L1.2 2.9V1.15Z"
-        />
-        <path
-          fill="#4e4a44"
-          d="M1.2 1.15H22.4v.55H1.2Z"
-        />
-      </svg>
-    </span>
-  );
-}
-
 function ShelfBoard() {
   return (
     <div className="shelf-board" aria-hidden>
+      <span className="shelf-bracket shelf-bracket-left" />
+      <span className="shelf-bracket shelf-bracket-right" />
       <div className="shelf-top" />
       <div className="shelf-front" />
       <div className="shelf-cast" />
-      <ShelfBracket side="left" />
-      <ShelfBracket side="right" />
     </div>
   );
 }
@@ -108,8 +103,11 @@ export function RecordWall({ shelves }: Props) {
     );
   }
 
+  const demoId = shelves.find((shelf) => shelf.records.length > 0)?.records[0]?._id;
+
   return (
     <section className="record-wall" aria-label="Record shelves">
+      <SleeveDemo />
       {shelves.map((shelf, shelfIndex) => (
         <Reveal key={shelf._id} className="shelf" delayMs={shelfIndex * 70}>
           <div className="shelf-heading">
@@ -127,7 +125,7 @@ export function RecordWall({ shelves }: Props) {
             ) : (
               <div className="shelf-row">
                 {shelf.records.map((record) => (
-                  <Sleeve key={record._id} record={record} />
+                  <Sleeve key={record._id} record={record} demo={record._id === demoId} />
                 ))}
               </div>
             )}
