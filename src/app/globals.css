@@ -218,10 +218,11 @@ a:hover {
 }
 
 .shelf-title {
-  font-size: 0.84rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  text-transform: none;
   color: var(--foreground);
 }
 
