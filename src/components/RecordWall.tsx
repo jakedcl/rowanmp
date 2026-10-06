@@ -46,21 +46,52 @@ function Sleeve({ record }: { record: WallRecord }) {
   return (
     <Link href={`/records/${record.slug}`} className="sleeve">
       <span className="sleeve-caption">{record.title}</span>
-      <span className={`sleeve-face ${src ? "" : "sleeve-face-blank"}`.trim()}>
-        {src ? (
-          <Image
-            src={src}
-            alt={alt}
-            width={640}
-            height={640}
-            className="h-full w-full object-cover"
-            sizes="164px"
-          />
-        ) : (
-          <span className="sleeve-blank" aria-hidden />
-        )}
+      <span className="sleeve-stand">
+        <span className={`sleeve-face ${src ? "" : "sleeve-face-blank"}`.trim()}>
+          {src ? (
+            <Image
+              src={src}
+              alt={alt}
+              width={640}
+              height={640}
+              className="h-full w-full object-cover"
+              sizes="164px"
+            />
+          ) : (
+            <span className="sleeve-blank" aria-hidden />
+          )}
+        </span>
       </span>
     </Link>
+  );
+}
+
+function ShelfBracket({ side }: { side: "left" | "right" }) {
+  return (
+    <span className={`shelf-bracket shelf-bracket-${side}`}>
+      <svg viewBox="0 0 34 28" width="34" height="28" aria-hidden focusable="false">
+        <path
+          fill="#171615"
+          d="M1.2 1.15H22.4v1.85H3.55L7.15 26.2H4.55L1.2 2.9V1.15Z"
+        />
+        <path
+          fill="#4e4a44"
+          d="M1.2 1.15H22.4v.55H1.2Z"
+        />
+      </svg>
+    </span>
+  );
+}
+
+function ShelfBoard() {
+  return (
+    <div className="shelf-board" aria-hidden>
+      <div className="shelf-top" />
+      <div className="shelf-front" />
+      <div className="shelf-cast" />
+      <ShelfBracket side="left" />
+      <ShelfBracket side="right" />
+    </div>
   );
 }
 
@@ -100,7 +131,7 @@ export function RecordWall({ shelves }: Props) {
                 ))}
               </div>
             )}
-            <div className="shelf-bar" aria-hidden />
+            <ShelfBoard />
           </div>
         </Reveal>
       ))}
