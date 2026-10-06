@@ -24,7 +24,7 @@ export const POSTS_QUERY = defineQuery(`
 `);
 
 export const RECENT_POSTS_QUERY = defineQuery(`
-  *[_type == "post" && defined(slug.current)] | order(publishedAt desc)[0...3] {
+  *[_type == "post" && defined(slug.current)] | order(publishedAt desc)[0...5] {
     _id,
     title,
     "slug": slug.current,

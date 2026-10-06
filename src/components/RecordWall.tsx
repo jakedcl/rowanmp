@@ -50,7 +50,6 @@ function Sleeve({ record, demo = false }: { record: WallRecord; demo?: boolean }
       className="sleeve"
       {...(demo ? { "data-sleeve-demo": "" } : {})}
     >
-      <span className="sleeve-caption">{record.title}</span>
       <span className="sleeve-stand">
         <span className="sleeve-disc" aria-hidden>
           <span className="sleeve-disc-label">
@@ -72,6 +71,9 @@ function Sleeve({ record, demo = false }: { record: WallRecord; demo?: boolean }
           ) : (
             <span className="sleeve-blank" aria-hidden />
           )}
+          <span className="sleeve-vignette">
+            <span className="sleeve-name">{record.title}</span>
+          </span>
         </span>
       </span>
     </Link>

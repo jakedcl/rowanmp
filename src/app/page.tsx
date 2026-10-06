@@ -2,7 +2,6 @@ import type { PortableTextBlock } from "@portabletext/react";
 import type { SanityImageSource } from "@sanity/image-url";
 import Link from "next/link";
 import { RecordWall, type WallShelf } from "@/components/RecordWall";
-import { Reveal } from "@/components/Reveal";
 import { RichText } from "@/components/RichText";
 import { SiteShell } from "@/components/SiteShell";
 import { sanityFetch } from "@/sanity/lib/live";
@@ -25,17 +24,17 @@ type RecentPost = {
   _id: string;
   title: string;
   slug: string;
-  category: string;
   publishedAt: string;
 };
 
-const CATEGORY_LABEL: Record<string, string> = {
-  announcement: "Announcement",
-  publication: "Publication",
-  project: "Project",
-  talk: "Talk",
-  other: "Other",
-};
+function formatDate(value: string) {
+  const date = new Date(`${value}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+  });
+}
 
 export default async function HomePage() {
   const [
@@ -67,9 +66,34 @@ export default async function HomePage() {
       active="home"
     >
       <main>
-        <RecordWall shelves={shelves} />
+        <div className="home-split">
+          <div className="home-wall">
+            <RecordWall shelves={shelves} />
+          </div>
 
-        <section className="mt-14 border-t border-rule pt-10">
+          {recent.length > 0 ? (
+            <aside className="home-rail" aria-label="Recent posts">
+              <div className="mb-3 flex items-baseline justify-between gap-3">
+                <h2 className="section-label">Latest</h2>
+                <Link href="/posts" className="text-[0.8rem] no-underline hover:underline">
+                  All posts
+                </Link>
+              </div>
+              <ul>
+                {recent.map((post) => (
+                  <li key={post._id}>
+                    <Link href={`/posts/${post.slug}`} className="home-post">
+                      <span className="home-post-date">{formatDate(post.publishedAt)}</span>
+                      <span className="home-post-title">{post.title}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          ) : null}
+        </div>
+
+        <section className="mt-10 border-t border-rule pt-8">
           <h2 className="section-label">About</h2>
           <div className="mt-6">
             {page?.length ? (
@@ -85,44 +109,6 @@ export default async function HomePage() {
             )}
           </div>
         </section>
-
-        {recent.length > 0 ? (
-          <Reveal className="mt-14">
-            <div className="border-t border-rule pt-10">
-              <div className="flex items-baseline justify-between gap-4">
-                <h2 className="section-label">Recent posts</h2>
-                <Link
-                  href="/posts"
-                  className="text-[0.85rem] no-underline hover:underline"
-                >
-                  All posts →
-                </Link>
-              </div>
-              <ul className="mt-5 divide-y divide-rule border-y border-rule">
-                {recent.map((post) => (
-                  <li key={post._id}>
-                    <Link
-                      href={`/posts/${post.slug}`}
-                      className="post-row group grid grid-cols-[4.5rem_1fr] gap-4 py-4 text-foreground no-underline sm:grid-cols-[5.5rem_1fr]"
-                    >
-                      <span className="pt-0.5 text-[0.8rem] tabular-nums text-muted">
-                        {post.publishedAt.slice(0, 4)}
-                      </span>
-                      <span>
-                        <span className="block text-[0.75rem] uppercase tracking-[0.05em] text-muted">
-                          {CATEGORY_LABEL[post.category] ?? post.category}
-                        </span>
-                        <span className="post-title mt-1 block text-[1.02rem] font-bold leading-snug">
-                          {post.title}
-                        </span>
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-        ) : null}
       </main>
     </SiteShell>
   );
