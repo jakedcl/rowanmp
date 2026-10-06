@@ -327,11 +327,14 @@ a:hover {
 }
 
 .sleeve {
+  position: relative;
+  z-index: 0;
   display: flex;
   flex: 0 0 8.6rem;
   width: 8.6rem;
   flex-direction: column;
   gap: 0.4rem;
+  overflow: visible;
   text-decoration: none;
   color: inherit;
 }
@@ -361,7 +364,6 @@ a:hover {
 .sleeve-stand {
   position: relative;
   display: block;
-  margin-top: 36%;
   overflow: visible;
 }
 
@@ -383,7 +385,7 @@ a:hover {
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.07),
     inset 0 0 14px rgba(0, 0, 0, 0.55);
-  transform: translateY(8%);
+  transform: translateX(0);
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -532,9 +534,14 @@ a:hover {
 }
 
 @media (hover: hover) {
+  .sleeve:hover,
+  .sleeve:focus-visible {
+    z-index: 3;
+  }
+
   .sleeve:hover .sleeve-disc,
   .sleeve:focus-visible .sleeve-disc {
-    transform: translateY(-40%);
+    transform: translateX(48%);
   }
 
   .sleeve:hover .sleeve-caption,
@@ -631,7 +638,7 @@ a:hover {
 
   .sleeve-disc {
     opacity: 0;
-    transform: translateY(-40%);
+    transform: translateX(48%);
   }
 
   @media (hover: hover) {
