@@ -46,21 +46,35 @@ function Sleeve({ record }: { record: WallRecord }) {
   return (
     <Link href={`/records/${record.slug}`} className="sleeve">
       <span className="sleeve-caption">{record.title}</span>
-      <span className={`sleeve-face ${src ? "" : "sleeve-face-blank"}`.trim()}>
-        {src ? (
-          <Image
-            src={src}
-            alt={alt}
-            width={640}
-            height={640}
-            className="h-full w-full object-cover"
-            sizes="164px"
-          />
-        ) : (
-          <span className="sleeve-blank" aria-hidden />
-        )}
+      <span className="sleeve-stand">
+        <span className={`sleeve-face ${src ? "" : "sleeve-face-blank"}`.trim()}>
+          {src ? (
+            <Image
+              src={src}
+              alt={alt}
+              width={640}
+              height={640}
+              className="h-full w-full object-cover"
+              sizes="164px"
+            />
+          ) : (
+            <span className="sleeve-blank" aria-hidden />
+          )}
+        </span>
       </span>
     </Link>
+  );
+}
+
+function ShelfBoard() {
+  return (
+    <div className="shelf-board" aria-hidden>
+      <div className="shelf-top" />
+      <div className="shelf-front" />
+      <div className="shelf-cast" />
+      <span className="shelf-bracket shelf-bracket-left" />
+      <span className="shelf-bracket shelf-bracket-right" />
+    </div>
   );
 }
 
@@ -100,7 +114,7 @@ export function RecordWall({ shelves }: Props) {
                 ))}
               </div>
             )}
-            <div className="shelf-bar" aria-hidden />
+            <ShelfBoard />
           </div>
         </Reveal>
       ))}

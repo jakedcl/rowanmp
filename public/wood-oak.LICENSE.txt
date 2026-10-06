@@ -1,0 +1,7 @@
+Wood049 color map, used as the homepage shelf grain (wood-oak.webp).
+
+Source: ambientCG — https://ambientcg.com/view?id=Wood049
+License: CC0 1.0 Universal
+https://creativecommons.org/publicdomain/zero/1.0/
+
+The 1K color map was encoded to WebP. No other maps from the set are included.
