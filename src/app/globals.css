@@ -253,7 +253,7 @@ a:hover {
   z-index: 2;
   display: flex;
   align-items: flex-end;
-  gap: 0.85rem;
+  gap: 0.65rem;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   padding: 0.15rem 0.35rem 1.2rem;
@@ -400,8 +400,8 @@ a:hover {
   position: relative;
   z-index: 0;
   display: block;
-  flex: 0 0 8.6rem;
-  width: 8.6rem;
+  flex: 0 0 6.25rem;
+  width: 6.25rem;
   overflow: visible;
   text-decoration: none;
   color: inherit;
@@ -409,16 +409,16 @@ a:hover {
 
 @media (min-width: 640px) {
   .shelf-row {
-    gap: 1.1rem;
+    gap: 0.8rem;
   }
 
   .sleeve {
-    flex-basis: 10.25rem;
-    width: 10.25rem;
+    flex-basis: 7.5rem;
+    width: 7.5rem;
   }
 
   .sleeve-name {
-    font-size: 0.78rem;
+    font-size: 0.72rem;
   }
 }
 
@@ -449,7 +449,7 @@ a:hover {
   line-clamp: 2;
   overflow: hidden;
   color: #f7f4ef;
-  font-size: 0.72rem;
+  font-size: 0.66rem;
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: 0.01em;
@@ -691,6 +691,16 @@ a:hover {
   62% {
     opacity: 1;
   }
+}
+
+/* Tap peek where hover is unavailable. Same slide as :hover; JS removes it by navigating. */
+.sleeve.is-peek {
+  z-index: 3;
+}
+
+.sleeve.is-peek .sleeve-disc {
+  animation: none;
+  transform: translateX(48%) translateY(-50%);
 }
 
 .sleeve:focus-visible {
