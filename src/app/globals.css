@@ -256,7 +256,7 @@ a:hover {
   gap: 0.65rem;
   overflow-x: auto;
   overscroll-behavior-x: contain;
-  padding: 0.35rem 0.35rem 1.2rem;
+  padding: 0.15rem 0.35rem 1.2rem;
   margin-bottom: calc(-1.2rem - 3px);
   scrollbar-width: thin;
 }
@@ -397,7 +397,6 @@ a:hover {
 }
 
 .sleeve {
-  --jacket-depth: 3px;
   position: relative;
   z-index: 0;
   display: block;
@@ -406,42 +405,6 @@ a:hover {
   overflow: visible;
   text-decoration: none;
   color: inherit;
-}
-
-/* Quarter-inch jacket: top edge and left spine. Right side stays open for the disc. */
-.sleeve::before,
-.sleeve::after {
-  content: "";
-  position: absolute;
-  z-index: 4;
-  pointer-events: none;
-}
-
-.sleeve::before {
-  left: -1px;
-  right: 0;
-  top: calc(var(--jacket-depth) * -1);
-  height: var(--jacket-depth);
-  background: linear-gradient(
-    to bottom,
-    #cfc3b0 0%,
-    #f3ebdf 48%,
-    #b3a492 100%
-  );
-}
-
-.sleeve::after {
-  top: calc(var(--jacket-depth) * -1);
-  bottom: 0;
-  left: calc(var(--jacket-depth) * -1);
-  width: var(--jacket-depth);
-  background: linear-gradient(
-    to right,
-    #6d5d4c 0%,
-    #a89480 42%,
-    #e7dccb 78%,
-    #8b7966 100%
-  );
 }
 
 @media (min-width: 640px) {
@@ -597,17 +560,20 @@ a:hover {
   content: "";
   position: absolute;
   z-index: 0;
-  left: 5%;
-  right: 5%;
-  bottom: -10px;
-  height: 14px;
+  left: 4%;
+  right: 8%;
+  bottom: -5px;
+  height: 9px;
   background: radial-gradient(
-    ellipse 86% 78% at 50% 0%,
-    rgba(28, 14, 6, 0.36) 0%,
-    rgba(28, 14, 6, 0.14) 42%,
-    rgba(28, 14, 6, 0) 70%
+    ellipse at center,
+    rgba(24, 12, 6, 0.58) 0%,
+    rgba(24, 12, 6, 0.18) 52%,
+    transparent 72%
   );
   pointer-events: none;
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.28s ease;
 }
 
 .sleeve-face {
@@ -619,7 +585,9 @@ a:hover {
   overflow: hidden;
   background: #d9d2c4;
   border: 1px solid rgba(40, 25, 10, 0.2);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.28) inset;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.28) inset,
+    4px 6px 11px rgba(40, 25, 10, 0.14);
 }
 
 .sleeve-face-blank {
