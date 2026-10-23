@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SanityImage } from "@/components/SanityImage";
 import Link from "next/link";
 import type { SanityImageSource } from "@sanity/image-url";
 import { Reveal } from "@/components/Reveal";
@@ -51,13 +51,13 @@ function Sleeve({ record, demo = false }: { record: WallRecord; demo?: boolean }
         <span className="sleeve-disc" aria-hidden>
           <span className="sleeve-disc-label">
             {src ? (
-              <Image src={src} alt="" fill className="object-cover" sizes="48px" />
+              <SanityImage src={src} alt="" fill className="object-cover" sizes="48px" />
             ) : null}
           </span>
         </span>
         <span className={`sleeve-face ${src ? "" : "sleeve-face-blank"}`.trim()}>
           {src ? (
-            <Image
+            <SanityImage
               src={src}
               alt={alt}
               width={640}

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SanityImage } from "@/components/SanityImage";
 import Link from "next/link";
 import type { PortableTextBlock } from "@portabletext/react";
 import type { Metadata } from "next";
@@ -114,12 +114,12 @@ export default async function RecordPage({ params }: PageProps) {
           {sleeveSrc ? (
             <Reveal>
               <div className="record-hero-sleeve relative aspect-square w-full max-w-[16rem] overflow-hidden bg-panel">
-                <Image
+                <SanityImage
                   src={sleeveSrc}
                   alt={record.sleeve?.alt || record.title}
                   fill
                   className="object-cover"
-                  sizes="16rem"
+                  sizes="(min-width: 640px) 16rem, 50vw"
                   priority
                 />
               </div>
