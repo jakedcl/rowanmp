@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SanityImage } from "@/components/SanityImage";
 import {
   PortableText,
   type PortableTextComponents,
@@ -67,11 +67,12 @@ const components: PortableTextComponents = {
       return (
         <Reveal className="mt-10">
           <figure>
-            <Image
+            <SanityImage
               src={src}
               alt={alt}
               width={1200}
               height={800}
+              sizes="(min-width: 768px) 720px, 100vw"
               className="rich-image h-auto w-full border border-rule"
             />
             {value.caption ? (

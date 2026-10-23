@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SanityImage } from "@/components/SanityImage";
 import type { SanityImageSource } from "@sanity/image-url";
 import { SiteShell } from "@/components/SiteShell";
 import { urlFor } from "@/sanity/lib/image";
@@ -39,7 +39,7 @@ export default async function ContactPage() {
         <div className="mt-8 grid gap-10 sm:grid-cols-[11rem_1fr] sm:gap-12">
           <div className="portrait-frame relative aspect-[4/5] w-full max-w-[11rem] overflow-hidden border border-rule bg-panel">
             {portraitSrc ? (
-              <Image
+              <SanityImage
                 src={portraitSrc}
                 alt={settings?.portrait?.alt || name}
                 fill

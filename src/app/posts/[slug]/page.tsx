@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SanityImage } from "@/components/SanityImage";
 import Link from "next/link";
 import type { PortableTextBlock } from "@portabletext/react";
 import { notFound } from "next/navigation";
@@ -129,11 +129,12 @@ export default async function PostPage({ params }: PageProps) {
 
         {coverSrc ? (
           <Reveal className="mt-8">
-            <Image
+            <SanityImage
               src={coverSrc}
               alt={post.coverImage?.alt || post.title}
               width={1200}
               height={800}
+              sizes="(min-width: 768px) 720px, 100vw"
               className="rich-image h-auto w-full border border-rule"
               priority
             />

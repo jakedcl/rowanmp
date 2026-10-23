@@ -40,3 +40,5 @@ npm run dev
 | Dataset | `production` |
 | Manage | https://www.sanity.io/manage/project/0mbng8go |
 | Members | https://www.sanity.io/manage/project/0mbng8go/members |
+
+**Images:** Sanity assets (`cdn.sanity.io`) use a custom `next/image` loader (`src/lib/sanityImageLoader.ts` via `SanityImage`) so resizing runs on Sanity’s CDN, not Vercel Image Optimization. The team’s Vercel transformation quota is shared across projects; local `/public` images still use Vercel’s default optimizer.
