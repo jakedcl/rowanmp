@@ -2,6 +2,10 @@
 
 Personal site for Rowan Mentley-Peters (Biology, SUNY Oneonta). Homepage is rows of "record shelves" (square sleeves on a wooden bar) with About underneath; posts are separate; header CV link downloads a PDF (`/cv` too).
 
+## Dev framework
+
+This repo follows Jake's dev framework: [jakedcl/dev-framework](https://github.com/jakedcl/dev-framework) (start at its `AGENTS.md`). The framework is the source of truth; if anything in this file conflicts with it, the framework wins.
+
 This Next.js version has breaking changes; check node_modules/next/dist/docs before using APIs.
 
 ## Stack (from package.json)
