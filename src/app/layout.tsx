@@ -3,6 +3,7 @@ import "./globals.css";
 import { SanityLive } from "@/sanity/lib/live";
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.rowanmp.com'),
   title: "Rowan Mentley-Peters — Biology, SUNY Oneonta",
   description:
     "M.S. student in Biology at SUNY Oneonta. Freshwater mussel genetics, field surveys, and SCUBA research.",
