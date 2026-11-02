@@ -22,9 +22,17 @@ Homepage is a set of **record shelves** (a wooden bar with square sleeves), with
 
 ## Local
 
+Create `.env.local` first. The site won't start without the Sanity project and dataset:
+
+```
+NEXT_PUBLIC_SANITY_PROJECT_ID=0mbng8go
+NEXT_PUBLIC_SANITY_DATASET=production
+```
+
+Then:
+
 ```bash
 npm install
-cp .env.example .env.local
 npm run dev
 ```
 
