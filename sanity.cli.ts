@@ -5,5 +5,4 @@ export default defineCliConfig({
     projectId: "0mbng8go",
     dataset: "production",
   },
-  studioHost: "rowanmp",
 });
