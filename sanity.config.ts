@@ -10,6 +10,9 @@ export default defineConfig({
   projectId,
   dataset,
   basePath: "/studio",
+  releases: { enabled: false },
+  scheduledDrafts: { enabled: false },
+  tasks: { enabled: false },
   schema: { types: schemaTypes },
   plugins: [
     structureTool({
