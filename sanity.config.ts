@@ -10,6 +10,7 @@ export default defineConfig({
   projectId,
   dataset,
   basePath: "/studio",
+  releases: { enabled: false },
   schema: { types: schemaTypes },
   plugins: [
     structureTool({
