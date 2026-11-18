@@ -68,6 +68,12 @@ a:hover {
   border-color: color-mix(in srgb, var(--wood-mid) 28%, var(--rule));
 }
 
+.site-chrome a:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
 .portrait-frame {
   box-shadow: 0 1px 0 rgba(26, 26, 26, 0.04);
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
