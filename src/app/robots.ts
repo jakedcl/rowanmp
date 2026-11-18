@@ -7,5 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: "/studio",
     },
+    sitemap: "https://rowanmp.com/sitemap.xml",
   };
 }
