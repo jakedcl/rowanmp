@@ -57,7 +57,7 @@ export async function generateMetadata({
     : undefined;
 
   return {
-    title: `${record.title} — Rowan Mentley-Peters`,
+    title: record.title,
     description: record.summary ?? undefined,
     openGraph: {
       title: record.title,

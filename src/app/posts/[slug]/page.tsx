@@ -68,8 +68,12 @@ export async function generateMetadata({
   const post = data as Post | null;
   if (!post) return { title: "Post not found" };
   return {
-    title: `${post.title} — Rowan Mentley-Peters`,
+    title: post.title,
     description: post.summary ?? undefined,
+    openGraph: {
+      title: post.title,
+      description: post.summary ?? undefined,
+    },
   };
 }
 

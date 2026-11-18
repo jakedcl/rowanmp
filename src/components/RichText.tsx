@@ -62,7 +62,7 @@ const components: PortableTextComponents = {
   types: {
     image: ({ value }) => {
       if (!value?.asset) return null;
-      const alt = value.alt || "";
+      const alt = value.alt?.trim() || value.caption?.trim() || "";
       const src = urlFor(value).width(1200).height(800).fit("max").url();
       return (
         <Reveal className="mt-10">

@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Reveal } from "@/components/Reveal";
+
+export const metadata: Metadata = {
+  title: "Posts",
+  description:
+    "Publications, projects, talks, and announcements from Rowan Mentley-Peters.",
+};
 import { SiteShell } from "@/components/SiteShell";
 import { sanityFetch } from "@/sanity/lib/live";
 import { POSTS_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";

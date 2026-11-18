@@ -1,28 +1,23 @@
 # rowanmp
 
-Personal site for **Rowan Mentley-Peters** — Biology, SUNY Oneonta.
+Portfolio site for **Rowan Mentley-Peters** (Biology, SUNY Oneonta). Projects and writing are organized like vinyl on wooden shelves — live at **https://rowanmp.com**.
 
-Homepage is a set of **record shelves** (a wooden bar with square sleeves), with About underneath. Posts stay separate. The header CV link downloads the PDF; `/cv` is the same download.
+## Highlights
 
-## Stack
+- **Record wall** — Homepage rows of square sleeves on oak shelves. Hover (desktop) or tap (mobile) slides a sleeve out to reveal the label art; first visit runs a short on-page demo on one sleeve.
+- **Sanity CMS** — Content lives in Sanity (`production` dataset). Embedded **Studio** at `/studio` for shelves, records, posts, about copy, and CV PDF.
+- **Sanity CDN images** — `SanityImage` uses a custom `next/image` loader (`src/lib/sanityImageLoader.ts`) so `cdn.sanity.io` assets resize on Sanity’s CDN instead of Vercel Image Optimization. Local `/public` images still use the default optimizer.
 
-- Next.js App Router + Tailwind
-- Sanity CMS (Studio at `/studio`)
-- Vercel
+## Tech stack
 
-## How Rowan edits
+- Next.js 16 (App Router), React 19, TypeScript
+- Tailwind CSS 4
+- Sanity v6 + next-sanity (live preview, Portable Text)
+- Deployed on Vercel
 
-| In Studio | On the site |
-|---|---|
-| **Shelves** | Rows on the homepage |
-| **Records** | Sleeves on a shelf → `/records/[slug]` (square photo optional; a blank jacket shows until one is uploaded) |
-| **Home page** | About copy under the shelves |
-| **Posts** | `/posts` list + detail |
-| **CV** | PDF in the header, and the same file on `/cv` |
+## How it’s built / local dev
 
-## Local
-
-Create `.env.local` first. The site won't start without the Sanity project and dataset:
+Create `.env.local`:
 
 ```
 NEXT_PUBLIC_SANITY_PROJECT_ID=0mbng8go
@@ -36,17 +31,33 @@ npm install
 npm run dev
 ```
 
-- Site: http://localhost:3000
-- Studio: http://localhost:3000/studio
-- Contact: http://localhost:3000/contact
+| URL | Purpose |
+|-----|---------|
+| http://localhost:3000 | Site |
+| http://localhost:3000/studio | Sanity Studio |
+| http://localhost:3000/posts | Posts index |
+| http://localhost:3000/contact | Contact |
 
-## Sanity
+Build and lint: `npm run build`, `npm run lint`.
+
+## Production
+
+- **https://rowanmp.com** — apex canonical domain
+- `robots.txt` and `sitemap.xml` are generated from the app (CMS slugs included automatically)
+- Security headers (HSTS, frame options, referrer policy, etc.) are set in `next.config.ts` — no site-wide CSP, so `/studio` can load embedded Sanity tooling
+
+## Sanity project
 
 | | |
 |---|---|
 | Project | `rowanmp` (`0mbng8go`) |
 | Dataset | `production` |
 | Manage | https://www.sanity.io/manage/project/0mbng8go |
-| Members | https://www.sanity.io/manage/project/0mbng8go/members |
 
-**Images:** Sanity assets (`cdn.sanity.io`) use a custom `next/image` loader (`src/lib/sanityImageLoader.ts` via `SanityImage`) so resizing runs on Sanity’s CDN, not Vercel Image Optimization. The team’s Vercel transformation quota is shared across projects; local `/public` images still use Vercel’s default optimizer.
+| In Studio | On the site |
+|---|---|
+| **Shelves** | Homepage rows |
+| **Records** | Sleeves → `/records/[slug]` |
+| **Home page** | About under the wall |
+| **Posts** | `/posts` and `/posts/[slug]` |
+| **CV** | Header link + `/cv` download |
