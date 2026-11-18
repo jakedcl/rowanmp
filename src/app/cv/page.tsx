@@ -5,7 +5,7 @@ import { sanityFetch } from "@/sanity/lib/live";
 import { SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
 
 export const metadata: Metadata = {
-  title: "Curriculum Vitae — Rowan Mentley-Peters",
+  title: "Curriculum Vitae",
   description:
     "Curriculum vitae for Rowan Mentley-Peters, M.S. student in Biology at SUNY Oneonta.",
 };

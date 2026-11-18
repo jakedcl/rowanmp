@@ -1,6 +1,13 @@
 import { SanityImage } from "@/components/SanityImage";
+import type { Metadata } from "next";
 import type { SanityImageSource } from "@sanity/image-url";
 import { SiteShell } from "@/components/SiteShell";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Contact Rowan Mentley-Peters — email, affiliation, and CV download.",
+};
 import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
 import { SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
