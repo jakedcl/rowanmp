@@ -40,6 +40,11 @@ npm run dev
 - Studio: http://localhost:3000/studio
 - Contact: http://localhost:3000/contact
 
+## Production
+
+- Site: https://rowanmp.com
+- `robots.txt` and `sitemap.xml` are generated from the app (CMS slugs included automatically).
+
 ## Sanity
 
 | | |
