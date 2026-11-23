@@ -10,22 +10,10 @@ export const metadata: Metadata = {
 import { SiteShell } from "@/components/SiteShell";
 import { sanityFetch } from "@/sanity/lib/live";
 import { POSTS_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
-
-type SiteSettings = {
-  name?: string | null;
-  tagline?: string | null;
-  email?: string | null;
-  cvUrl?: string | null;
-};
-
-type PostListItem = {
-  _id: string;
-  title: string;
-  slug: string;
-  category: string;
-  publishedAt: string;
-  summary?: string | null;
-};
+import type {
+  POSTS_QUERY_RESULT,
+  SITE_SETTINGS_QUERY_RESULT,
+} from "../../../sanity.types";
 
 const CATEGORY_LABEL: Record<string, string> = {
   announcement: "Announcement",
@@ -35,7 +23,8 @@ const CATEGORY_LABEL: Record<string, string> = {
   other: "Other",
 };
 
-function formatDate(value: string) {
+function formatDate(value: string | null | undefined) {
+  if (!value) return "";
   const date = new Date(`${value}T00:00:00`);
   if (Number.isNaN(date.getTime())) return value;
   return date.toLocaleDateString("en-US", {
@@ -50,8 +39,8 @@ export default async function PostsPage() {
     sanityFetch({ query: POSTS_QUERY }),
   ]);
 
-  const settings = settingsData as SiteSettings | null;
-  const posts = (postsData as PostListItem[] | null) ?? [];
+  const settings = settingsData as SITE_SETTINGS_QUERY_RESULT;
+  const posts = (postsData as POSTS_QUERY_RESULT | null) ?? [];
   const name = settings?.name ?? "Rowan Mentley-Peters";
 
   return (
@@ -80,7 +69,7 @@ export default async function PostsPage() {
             {posts.map((post, index) => (
               <Reveal key={post._id} as="li" delayMs={index * 50}>
                 <Link
-                  href={`/posts/${post.slug}`}
+                  href={`/posts/${post.slug ?? ""}`}
                   className="post-row group grid grid-cols-[4.5rem_1fr] gap-4 py-5 text-foreground no-underline sm:grid-cols-[5.5rem_1fr] sm:gap-6"
                 >
                   <span className="pt-0.5 text-[0.8rem] leading-snug tabular-nums text-muted">
@@ -88,7 +77,8 @@ export default async function PostsPage() {
                   </span>
                   <span>
                     <span className="block text-[0.75rem] uppercase tracking-[0.05em] text-muted">
-                      {CATEGORY_LABEL[post.category] ?? post.category}
+                      {CATEGORY_LABEL[post.category ?? "other"] ??
+                        post.category}
                     </span>
                     <span className="post-title mt-1 block text-[1.1rem] font-bold leading-snug">
                       {post.title}
