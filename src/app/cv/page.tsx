@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SiteShell } from "@/components/SiteShell";
 import { sanityFetch } from "@/sanity/lib/live";
 import { SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
+import type { SITE_SETTINGS_QUERY_RESULT } from "../../../sanity.types";
 
 export const metadata: Metadata = {
   title: "Curriculum Vitae",
@@ -10,16 +11,9 @@ export const metadata: Metadata = {
     "Curriculum vitae for Rowan Mentley-Peters, M.S. student in Biology at SUNY Oneonta.",
 };
 
-type SiteSettings = {
-  name?: string | null;
-  tagline?: string | null;
-  email?: string | null;
-  cvUrl?: string | null;
-};
-
 export default async function CvPage() {
   const { data } = await sanityFetch({ query: SITE_SETTINGS_QUERY });
-  const settings = data as SiteSettings | null;
+  const settings = data as SITE_SETTINGS_QUERY_RESULT;
   const name = settings?.name ?? "Rowan Mentley-Peters";
   const tagline = settings?.tagline ?? "M.S. Student, Biology · SUNY Oneonta";
   const email = settings?.email ?? "mentrs635@oneonta.edu";

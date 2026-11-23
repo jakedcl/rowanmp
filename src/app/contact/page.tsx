@@ -1,7 +1,7 @@
 import { SanityImage } from "@/components/SanityImage";
 import type { Metadata } from "next";
-import type { SanityImageSource } from "@sanity/image-url";
 import { SiteShell } from "@/components/SiteShell";
+import type { SITE_SETTINGS_QUERY_RESULT } from "../../../sanity.types";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -12,17 +12,9 @@ import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
 import { SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
 
-type SiteSettings = {
-  name?: string | null;
-  tagline?: string | null;
-  email?: string | null;
-  cvUrl?: string | null;
-  portrait?: (SanityImageSource & { alt?: string }) | null;
-};
-
 export default async function ContactPage() {
   const { data } = await sanityFetch({ query: SITE_SETTINGS_QUERY });
-  const settings = data as SiteSettings | null;
+  const settings = data as SITE_SETTINGS_QUERY_RESULT;
 
   const name = settings?.name ?? "Rowan Mentley-Peters";
   const tagline =

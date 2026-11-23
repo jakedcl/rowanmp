@@ -9,8 +9,8 @@ const baseUrl = "https://rowanmp.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [posts, records] = await Promise.all([
-    client.fetch<{ slug: string }[]>(POST_SLUGS_QUERY),
-    client.fetch<{ slug: string }[]>(RECORD_SLUGS_QUERY),
+    client.fetch(POST_SLUGS_QUERY),
+    client.fetch(RECORD_SLUGS_QUERY),
   ]);
 
   const staticRoutes: MetadataRoute.Sitemap = [

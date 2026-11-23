@@ -3,7 +3,6 @@ import Link from "next/link";
 import type { PortableTextBlock } from "@portabletext/react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import type { SanityImageSource } from "@sanity/image-url";
 import { Reveal } from "@/components/Reveal";
 import { RichText } from "@/components/RichText";
 import { SiteShell } from "@/components/SiteShell";
@@ -13,24 +12,10 @@ import {
   RECORD_BY_SLUG_QUERY,
   SITE_SETTINGS_QUERY,
 } from "@/sanity/lib/queries";
-
-type SiteSettings = {
-  name?: string | null;
-  tagline?: string | null;
-  email?: string | null;
-  cvUrl?: string | null;
-};
-
-type RecordDoc = {
-  _id: string;
-  title: string;
-  slug: string;
-  summary?: string | null;
-  sleeve?: (SanityImageSource & { alt?: string }) | null;
-  body?: PortableTextBlock[] | null;
-  shelf?: { _id: string; title: string } | null;
-  relatedPost?: { title: string; slug: string } | null;
-};
+import type {
+  RECORD_BY_SLUG_QUERY_RESULT,
+  SITE_SETTINGS_QUERY_RESULT,
+} from "../../../../sanity.types";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -45,7 +30,7 @@ export async function generateMetadata({
     params: { slug },
     stega: false,
   });
-  const record = data as RecordDoc | null;
+  const record = data as RECORD_BY_SLUG_QUERY_RESULT;
   if (!record) return { title: "Record not found" };
 
   const images = record.sleeve
@@ -57,10 +42,10 @@ export async function generateMetadata({
     : undefined;
 
   return {
-    title: record.title,
+    title: record.title ?? undefined,
     description: record.summary ?? undefined,
     openGraph: {
-      title: record.title,
+      title: record.title ?? undefined,
       description: record.summary ?? undefined,
       images,
     },
@@ -78,8 +63,8 @@ export default async function RecordPage({ params }: PageProps) {
     }),
   ]);
 
-  const settings = settingsData as SiteSettings | null;
-  const record = recordData as RecordDoc | null;
+  const settings = settingsData as SITE_SETTINGS_QUERY_RESULT;
+  const record = recordData as RECORD_BY_SLUG_QUERY_RESULT;
   if (!record) notFound();
 
   const name = settings?.name ?? "Rowan Mentley-Peters";
@@ -116,7 +101,7 @@ export default async function RecordPage({ params }: PageProps) {
               <div className="record-hero-sleeve relative aspect-square w-full max-w-[16rem] overflow-hidden bg-panel">
                 <SanityImage
                   src={sleeveSrc}
-                  alt={record.sleeve?.alt || record.title}
+                  alt={record.sleeve?.alt || record.title || "Record sleeve"}
                   fill
                   className="object-cover"
                   sizes="(min-width: 640px) 16rem, 50vw"
@@ -142,7 +127,7 @@ export default async function RecordPage({ params }: PageProps) {
 
             {record.body?.length ? (
               <div className="mt-8">
-                <RichText value={record.body} />
+                <RichText value={record.body as PortableTextBlock[]} />
               </div>
             ) : (
               <p className="mt-8 text-[0.95rem] text-muted">

@@ -1,5 +1,4 @@
 import type { PortableTextBlock } from "@portabletext/react";
-import type { SanityImageSource } from "@sanity/image-url";
 import Link from "next/link";
 import { RecordWall, type WallShelf } from "@/components/RecordWall";
 import { RichText } from "@/components/RichText";
@@ -10,24 +9,13 @@ import {
   SHELVES_WITH_RECORDS_QUERY,
   SITE_SETTINGS_QUERY,
 } from "@/sanity/lib/queries";
+import type {
+  RECENT_POSTS_QUERY_RESULT,
+  SITE_SETTINGS_QUERY_RESULT,
+} from "../../sanity.types";
 
-type SiteSettings = {
-  name?: string | null;
-  tagline?: string | null;
-  email?: string | null;
-  cvUrl?: string | null;
-  portrait?: (SanityImageSource & { alt?: string }) | null;
-  page?: PortableTextBlock[] | null;
-};
-
-type RecentPost = {
-  _id: string;
-  title: string;
-  slug: string;
-  publishedAt: string;
-};
-
-function formatDate(value: string) {
+function formatDate(value: string | null | undefined) {
+  if (!value) return "";
   const date = new Date(`${value}T00:00:00`);
   if (Number.isNaN(date.getTime())) return value;
   return date.toLocaleDateString("en-US", {
@@ -47,9 +35,9 @@ export default async function HomePage() {
     sanityFetch({ query: RECENT_POSTS_QUERY }),
   ]);
 
-  const settings = settingsData as SiteSettings | null;
+  const settings = settingsData as SITE_SETTINGS_QUERY_RESULT;
   const shelves = (shelvesData as WallShelf[] | null) ?? [];
-  const recent = (recentData as RecentPost[] | null) ?? [];
+  const recent = (recentData as RECENT_POSTS_QUERY_RESULT | null) ?? [];
 
   const name = settings?.name ?? "Rowan Mentley-Peters";
   const tagline =
@@ -82,7 +70,10 @@ export default async function HomePage() {
               <ul>
                 {recent.map((post) => (
                   <li key={post._id}>
-                    <Link href={`/posts/${post.slug}`} className="home-post">
+                    <Link
+                      href={`/posts/${post.slug ?? ""}`}
+                      className="home-post"
+                    >
                       <span className="home-post-date">{formatDate(post.publishedAt)}</span>
                       <span className="home-post-title">{post.title}</span>
                     </Link>
@@ -97,7 +88,7 @@ export default async function HomePage() {
           <h2 className="section-label">About</h2>
           <div className="mt-6">
             {page?.length ? (
-              <RichText value={page} />
+              <RichText value={page as PortableTextBlock[]} />
             ) : (
               <div className="border border-rule bg-panel px-5 py-8 text-[0.95rem] leading-relaxed text-muted">
                 <p className="font-bold text-foreground">About is empty</p>

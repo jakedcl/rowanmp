@@ -1,6 +1,6 @@
 import { SanityImage } from "@/components/SanityImage";
-import Link from "next/link";
 import type { PortableTextBlock } from "@portabletext/react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { Reveal } from "@/components/Reveal";
@@ -12,27 +12,10 @@ import {
   POST_BY_SLUG_QUERY,
   SITE_SETTINGS_QUERY,
 } from "@/sanity/lib/queries";
-
-type SiteSettings = {
-  name?: string | null;
-  tagline?: string | null;
-  email?: string | null;
-  cvUrl?: string | null;
-};
-
-type Post = {
-  _id: string;
-  title: string;
-  slug: string;
-  category: string;
-  publishedAt: string;
-  summary?: string | null;
-  coverImage?: {
-    alt?: string;
-    asset?: unknown;
-  } | null;
-  body?: PortableTextBlock[] | null;
-};
+import type {
+  POST_BY_SLUG_QUERY_RESULT,
+  SITE_SETTINGS_QUERY_RESULT,
+} from "../../../../sanity.types";
 
 const CATEGORY_LABEL: Record<string, string> = {
   announcement: "Announcement",
@@ -42,7 +25,8 @@ const CATEGORY_LABEL: Record<string, string> = {
   other: "Other",
 };
 
-function formatDate(value: string) {
+function formatDate(value: string | null | undefined) {
+  if (!value) return "";
   const date = new Date(`${value}T00:00:00`);
   if (Number.isNaN(date.getTime())) return value;
   return date.toLocaleDateString("en-US", {
@@ -65,13 +49,13 @@ export async function generateMetadata({
     params: { slug },
     stega: false,
   });
-  const post = data as Post | null;
+  const post = data as POST_BY_SLUG_QUERY_RESULT;
   if (!post) return { title: "Post not found" };
   return {
-    title: post.title,
+    title: post.title ?? undefined,
     description: post.summary ?? undefined,
     openGraph: {
-      title: post.title,
+      title: post.title ?? undefined,
       description: post.summary ?? undefined,
     },
   };
@@ -88,8 +72,8 @@ export default async function PostPage({ params }: PageProps) {
     }),
   ]);
 
-  const settings = settingsData as SiteSettings | null;
-  const post = postData as Post | null;
+  const settings = settingsData as SITE_SETTINGS_QUERY_RESULT;
+  const post = postData as POST_BY_SLUG_QUERY_RESULT;
 
   if (!post) notFound();
 
@@ -114,7 +98,7 @@ export default async function PostPage({ params }: PageProps) {
         </p>
 
         <p className="mt-6 text-[0.8rem] uppercase tracking-[0.04em] text-muted">
-          {CATEGORY_LABEL[post.category] ?? post.category}
+          {CATEGORY_LABEL[post.category ?? "other"] ?? post.category}
           <span className="mx-2 text-rule" aria-hidden>
             ·
           </span>
@@ -135,7 +119,7 @@ export default async function PostPage({ params }: PageProps) {
           <Reveal className="mt-8">
             <SanityImage
               src={coverSrc}
-              alt={post.coverImage?.alt || post.title}
+              alt={post.coverImage?.alt || post.title || "Post cover"}
               width={1200}
               height={800}
               sizes="(min-width: 768px) 720px, 100vw"
@@ -147,7 +131,7 @@ export default async function PostPage({ params }: PageProps) {
 
         {post.body?.length ? (
           <div className="mt-8">
-            <RichText value={post.body} />
+            <RichText value={post.body as PortableTextBlock[]} />
           </div>
         ) : (
           <p className="mt-8 text-[0.95rem] text-muted">
